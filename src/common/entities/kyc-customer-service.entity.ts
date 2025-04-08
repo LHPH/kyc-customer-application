@@ -4,40 +4,40 @@ import KycChannelEntity from './kyc-channel.entity';
 import KycOfficeEntity from './kyc-office.entity';
 import KycExecutiveEntity from './kyc-executive.entity';
 
-@Entity()
+@Entity({name: 'kyc_customer_service'})
 export class KycCustomerServiceEntity{
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @OneToOne(() => KycServicesEntity)
-    @JoinColumn()
+    @JoinColumn({name: 'id_service',referencedColumnName: 'id'})
     service: KycServicesEntity
 
-    @Column()
+    @Column({name: 'promotional_code'})
     promotionalCode: string;
 
     @OneToOne(() => KycChannelEntity)
-    @JoinColumn()
+    @JoinColumn({name: 'id_channel',referencedColumnName: 'id'})
     channel: KycChannelEntity
 
     @OneToOne(() => KycOfficeEntity)
-    @JoinColumn()
+    @JoinColumn({name: 'id_office',referencedColumnName: 'id'})
     office: KycOfficeEntity
 
     @Column()
     active: boolean;
 
-    @Column()
+    @Column({name: 'id_customer'})
     idCustomer: number;
 
     @OneToOne(() => KycExecutiveEntity)
-    @JoinColumn()
+    @JoinColumn({name: 'id_executive',referencedColumnName: 'id'})
     executive: KycExecutiveEntity
 
-    @Column()
+    @Column({name: 'creation_date'})
     creationDate: Date;
 
-    @Column()
+    @Column({name: 'modification_date'})
     modificationDate: Date;
 }

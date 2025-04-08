@@ -1,21 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm'
 
-@Entity()
+@Entity({name: 'kyc_executive'})
 export default class KycExecutiveEntity{
 
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({name: 'first_name'})
     firstName: string;
 
-    @Column()
+    @Column({name: 'second_name'})
     secondName: string;
 
-    @Column()
+    @Column({name: 'last_name'})
     lastName: string;
 
-    @Column()
+    @Column({name: 'second_last_name'})
     secondLastName: string;
 
 }

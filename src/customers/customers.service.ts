@@ -14,28 +14,39 @@ export class CustomerService{
 
     getCustomerContractedServices(): Promise<ResponseData<KycService[]>> {
 
-        const service: KycService = {
-            id: 1,
-            idService: 1,
-            service: 'SERVICE 1',
-            cost: 5000,
-            idChannel: 1,
-            channel: 'ONLINE',
-            idOffice: 1,
-            office: 'OFFICE 1',
-            active: true,
-            idExecutive: 1,
-            executive: 'EXECUTIVE',
-            creationDate: '2025-10-10'
-        }
+        return this.customerServices.find({where: {idCustomer: 5}})
+        .then(results => {
 
-        const arr: KycService[] = [service];
+            const arr: KycService[] = [];
+            let service: KycService;
 
-        const response: ResponseData<KycService[]> = {
-            data: arr,
-            notifications: []
-        }
+            results.map(element => {
+                
+                service = {
+                    id: element.id,
+                    idService: element.service.id,
+                    service: element.service.description,
+                    cost: 5000,
+                    idChannel: element.channel.id,
+                    channel: element.channel.description,
+                    idOffice: element.office.id,
+                    office: element.office.name,
+                    active: element.active,
+                    idExecutive: element.executive.id,
+                    executive: element.executive.firstName,
+                    creationDate: '2025-10-10'
+                }
+                arr.push(service);
+            })
 
-        return Promise.resolve(response);
+            return arr;
+        })
+        .then(arr => {
+            const response: ResponseData<KycService[]> = {
+                data: arr,
+                notifications: []
+            }
+            return response;
+        });
     }
 }

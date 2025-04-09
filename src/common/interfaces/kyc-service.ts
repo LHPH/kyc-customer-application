@@ -13,6 +13,6 @@ export interface KycService{
     active: boolean,
     idExecutive: number
     executive: string,
-    creationDate: string,
-    modificationDate?: string
+    creationDate: Date,
+    modificationDate?: Date
 }

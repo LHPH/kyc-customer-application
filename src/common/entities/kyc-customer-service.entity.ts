@@ -17,6 +17,9 @@ export class KycCustomerServiceEntity{
     @Column({name: 'promotional_code'})
     promotionalCode: string;
 
+    @Column({name: 'service_cost'})
+    serviceCost: number;
+
     @OneToOne(() => KycChannelEntity)
     @JoinColumn({name: 'id_channel',referencedColumnName: 'id'})
     channel: KycChannelEntity

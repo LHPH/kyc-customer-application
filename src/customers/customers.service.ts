@@ -4,12 +4,15 @@ import { Repository } from 'typeorm';
 import { KycService } from 'src/common/interfaces/kyc-service';
 import { ResponseData } from 'src/common/interfaces/response-data';
 import { KycCustomerServiceEntity } from 'src/common/entities/kyc-customer-service.entity';
+import { Notification } from 'src/common/interfaces/notification';
+import { KycMessagesService } from 'src/common/services/kyc-message.service';
 
 @Injectable()
 export class CustomerService{
 
     constructor(@InjectRepository(KycCustomerServiceEntity)
-               private customerServices: Repository<KycCustomerServiceEntity>
+               private customerServices: Repository<KycCustomerServiceEntity>,
+               private kycMessagesService: KycMessagesService
                ){}
 
     getCustomerContractedServices(): Promise<ResponseData<KycService[]>> {
@@ -26,7 +29,7 @@ export class CustomerService{
                     id: element.id,
                     idService: element.service.id,
                     service: element.service.description,
-                    cost: 5000,
+                    cost: element.serviceCost,
                     idChannel: element.channel.id,
                     channel: element.channel.description,
                     idOffice: element.office.id,
@@ -34,19 +37,37 @@ export class CustomerService{
                     active: element.active,
                     idExecutive: element.executive.id,
                     executive: element.executive.firstName,
-                    creationDate: '2025-10-10'
+                    creationDate: element.creationDate,
+                    modificationDate: element.modificationDate
                 }
-                arr.push(service);
+                arr[arr.length] = service;
             })
 
             return arr;
         })
         .then(arr => {
-            const response: ResponseData<KycService[]> = {
+            const successfulResponse: ResponseData<KycService[]> = {
                 data: arr,
                 notifications: []
             }
-            return response;
-        });
+            return successfulResponse;
+        })
+        .catch(error => {
+
+            console.error(error);
+            const notification: Notification = this.kycMessagesService.getMessage('000');
+            /*const notification: Notification = {
+                code: 'KYC-CUSTOMER-SERVICE-001',
+                message: 'Unexpected error',
+                type: 'ERROR',
+                time: new Date()
+            }*/
+
+            const errorResponse: ResponseData<KycService[]> = {
+                data: null,
+                notifications: [notification]
+            }
+            return errorResponse;
+        })
     }
 }

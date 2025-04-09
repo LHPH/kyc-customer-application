@@ -1,0 +1,31 @@
+kyc-messages:
+  catalog:
+    messages:
+      "000":
+        code: KYC-CUSTOMER-SERVICE-000
+        message: Unexpected Error
+        type: ERROR
+      "001":
+        code: KYC-CUSTOMER-SERVICE-001
+        message: The request is invalid
+        type: ERROR
+      "002":
+        code: KYC-CUSTOMER-SERVICE-002
+        message: The file could not be processed
+        type: ERROR
+      "003":
+        code: KYC-CUSTOMER-SERVICE-003
+        message: The operation could not be performed
+        type: ERROR
+      "004":
+        code: KYC-CUSTOMER-SERVICE-004
+        message: The key to load the campaign does not exists
+        type: ERROR
+      "005":
+        code: KYC-CUSTOMER-SERVICE-005
+        message: The campaign to publish contains errors
+        type: ERROR
+      "006":
+        code: KYC-CUSTOMER-SERVICE-006
+        message: It was upload a file with empty content
+        type: WARN

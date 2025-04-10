@@ -18,8 +18,8 @@ export class KycMessagesService{
 
             if(notification){
                 return {
-                    time: new Date(),
-                    ...notification
+                    ...notification,
+                    time: new Date()
                 };
             }
         }

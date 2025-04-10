@@ -1,0 +1,7 @@
+export enum MessageCodes{
+    UNEXPECTED_ERROR = '000',
+    INVALID_REQUEST = '001',
+    UNAVAILABLE_OPERATION = '002',
+    UNAUTHORIZED = '003',
+    BAD_GATEWAY_SERVICE = '004'
+}

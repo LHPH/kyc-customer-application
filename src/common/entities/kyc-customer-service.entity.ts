@@ -14,7 +14,7 @@ export class KycCustomerServiceEntity{
     @JoinColumn({name: 'id_service',referencedColumnName: 'id'})
     service: KycServicesEntity
 
-    @Column({name: 'promotional_code'})
+    @Column({name: 'promotionalcode'})
     promotionalCode: string;
 
     @Column({name: 'service_cost'})

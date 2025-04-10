@@ -6,6 +6,7 @@ import { ResponseData } from 'src/common/interfaces/response-data';
 import { KycCustomerServiceEntity } from 'src/common/entities/kyc-customer-service.entity';
 import { Notification } from 'src/common/interfaces/notification';
 import { KycMessagesService } from 'src/common/services/kyc-message.service';
+import { MessageCodes } from 'src/common/enums/message-codes.enum';
 
 @Injectable()
 export class CustomerService{
@@ -52,22 +53,16 @@ export class CustomerService{
             }
             return successfulResponse;
         })
-        .catch(error => {
+       /* .catch(error => {
 
-            console.error(error);
-            const notification: Notification = this.kycMessagesService.getMessage('000');
-            /*const notification: Notification = {
-                code: 'KYC-CUSTOMER-SERVICE-001',
-                message: 'Unexpected error',
-                type: 'ERROR',
-                time: new Date()
-            }*/
+            console.error('ERROR ',error);
+            const notification: Notification = this.kycMessagesService.getMessage(MessageCodes.UNEXPECTED_ERROR);
 
             const errorResponse: ResponseData<KycService[]> = {
                 data: null,
                 notifications: [notification]
             }
             return errorResponse;
-        })
+        })*/
     }
 }

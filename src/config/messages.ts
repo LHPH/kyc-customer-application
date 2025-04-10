@@ -7,7 +7,5 @@ const YAML_MESSAGE_CONFIG_FILENAME = 'messages.yaml';
 
 export default () => {
 
-    let value: KycMessages = yaml.load(readFileSync(join(__dirname,YAML_MESSAGE_CONFIG_FILENAME),'utf-8')) as KycMessages
-    console.log('YAML',value);
-    return value;
+    return yaml.load(readFileSync(join(__dirname,YAML_MESSAGE_CONFIG_FILENAME),'utf-8')) as KycMessages
 }

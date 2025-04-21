@@ -13,6 +13,7 @@ export class KycRestExceptionHandler<T extends HttpException | TypeORMError> imp
 
     catch(exception: any, host: ArgumentsHost) {
         
+        console.error("ERROR ",exception)
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
@@ -31,7 +32,7 @@ export class KycRestExceptionHandler<T extends HttpException | TypeORMError> imp
 
         const responseJson: ResponseData<any> = {
             data: null,
-            notifications: [notification]
+            error: notification
         };
 
         response.status(status).json(responseJson);

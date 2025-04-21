@@ -48,8 +48,7 @@ export class CustomerService{
         })
         .then(arr => {
             const successfulResponse: ResponseData<KycService[]> = {
-                data: arr,
-                notifications: []
+                data: arr
             }
             return successfulResponse;
         })

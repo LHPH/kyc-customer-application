@@ -3,5 +3,5 @@ import { Notification } from "./notification"
 export interface ResponseData<T>{
 
     data: T | null,
-    notifications: Notification[]
+    error?: Notification | null
 }

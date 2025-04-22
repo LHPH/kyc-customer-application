@@ -1,4 +1,4 @@
-import { Notification } from "./notification"
+import { Message } from "./message"
 
 export interface KycMessages{
     'kyc-messages': KycMessageCatalog
@@ -8,7 +8,7 @@ export interface KycMessageCatalog{
 
     catalog: {
         messages: {
-            [key: string]: Notification
+            [key: string]: Message
         }
     }
 }

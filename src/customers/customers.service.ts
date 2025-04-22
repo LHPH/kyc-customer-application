@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { KycService } from 'src/common/interfaces/kyc-service';
 import { ResponseData } from 'src/common/interfaces/response-data';
 import { KycCustomerServiceEntity } from 'src/common/entities/kyc-customer-service.entity';
-import { Notification } from 'src/common/interfaces/notification';
+import { Message } from 'src/common/interfaces/message';
 import { KycMessagesService } from 'src/common/services/kyc-message.service';
 import { MessageCodes } from 'src/common/enums/message-codes.enum';
 

@@ -1,14 +1,14 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { TypeORMError } from "typeorm";
-import { KycMessagesService } from './services/kyc-message.service';
-import { MessageCodes } from './enums/message-codes.enum';
-import { Notification } from './interfaces/notification';
-import { ResponseData } from './interfaces/response-data';
-import { KycRestException } from './exception/kyc-rest-exception.exception';
+import { KycMessagesService } from '../services/kyc-message.service';
+import { MessageCodes } from '../enums/message-codes.enum';
+import { Notification } from '../interfaces/message';
+import { ResponseData } from '../interfaces/response-data';
+import { KycRestException } from './kyc-rest-exception.exception';
 
 @Catch()
-export class KycRestExceptionHandler<T extends HttpException | TypeORMError> implements ExceptionFilter{
+export class KycRestExceptionHandler<T extends HttpException | KycRestException | TypeORMError> implements ExceptionFilter{
 
     constructor(private kycMessagesService: KycMessagesService){}
 

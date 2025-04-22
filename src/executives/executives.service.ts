@@ -14,7 +14,7 @@ import KycServicesEntity from "src/common/entities/kyc-services.entity";
 import JwtData from "src/common/interfaces/jwt-data.interface";
 import { KycRestException } from "src/common/exception/kyc-rest-exception.exception";
 import { KycMessagesService } from "src/common/services/kyc-message.service";
-import { Notification } from "src/common/interfaces/notification";
+import { Message } from "src/common/interfaces/message";
 import { MessageCodes } from "src/common/enums/message-codes.enum";
 
 @Injectable()
@@ -117,7 +117,7 @@ export class ExecutiveService{
 
     private getKycRestException(code: string, complement: string = '',status:HttpStatus): KycRestException{
 
-        const notification: Notification = this.kycMessagesService.getMessage(code);
+        const notification: Message = this.kycMessagesService.getMessage(code);
         notification.message = `${notification.message}. ${complement}`.trim();
         return new KycRestException(
             {

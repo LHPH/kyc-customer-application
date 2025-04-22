@@ -1,4 +1,4 @@
-import { Notification } from "../interfaces/notification";
+import { Notification } from "../interfaces/message";
 
 export interface ExceptionOptions{
 

@@ -1,7 +1,7 @@
-import { Notification } from "./notification"
+import { Message } from "./message"
 
 export interface ResponseData<T>{
 
     data: T | null,
-    error?: Notification | null
+    error?: Message | null
 }

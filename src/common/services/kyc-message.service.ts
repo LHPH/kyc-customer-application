@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Notification } from '../interfaces/notification';
+import { Message } from '../interfaces/message';
 import { ConfigService } from '@nestjs/config';
 import { KycMessageCatalog } from '../interfaces/kyc-messages.interfaces';
 
@@ -8,13 +8,13 @@ export class KycMessagesService{
 
     constructor(private configService: ConfigService){}
 
-    getMessage(code: string): Notification{
+    getMessage(code: string): Message{
 
         const catalogCatalog: KycMessageCatalog | undefined = this.configService.get<KycMessageCatalog>('kyc-messages');
 
         if(catalogCatalog){
             
-            let notification : Notification = catalogCatalog.catalog.messages[code];
+            let notification : Message = catalogCatalog.catalog.messages[code];
 
             if(notification){
                 return {

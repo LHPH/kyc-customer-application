@@ -22,7 +22,8 @@ export class ExecutiveController{
                 auth: {
                     owner: 1,
                     user: 1,
-                    role: KycUserRole.EXECUTIVE
+                    role: KycUserRole.EXECUTIVE,
+                    channel: 1
                 },
                 data: bodyReq
             }
@@ -43,7 +44,8 @@ export class ExecutiveController{
                 auth: {
                     owner: 1,
                     user: 1,
-                    role: KycUserRole.EXECUTIVE
+                    role: KycUserRole.EXECUTIVE,
+                    channel: 1
                 },
                 data: bodyReq
             }
@@ -64,7 +66,8 @@ export class ExecutiveController{
                 auth: {
                     owner: 1,
                     user: 1,
-                    role: KycUserRole.EXECUTIVE
+                    role: KycUserRole.EXECUTIVE,
+                    channel: 1
                 },
                 data: bodyReq
             }

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { KycCustomerServiceEntity } from 'src/common/entities/kyc-customer-service.entity';
@@ -11,6 +11,11 @@ import KycChannelEntity from "src/common/entities/kyc-channel.entity";
 import KycOfficeEntity from "src/common/entities/kyc-office.entity";
 import KycExecutiveEntity from "src/common/entities/kyc-executive.entity";
 import KycServicesEntity from "src/common/entities/kyc-services.entity";
+import JwtData from "src/common/interfaces/jwt-data.interface";
+import { KycRestException } from "src/common/exception/kyc-rest-exception.exception";
+import { KycMessagesService } from "src/common/services/kyc-message.service";
+import { Notification } from "src/common/interfaces/notification";
+import { MessageCodes } from "src/common/enums/message-codes.enum";
 
 @Injectable()
 export class ExecutiveService{
@@ -24,13 +29,30 @@ export class ExecutiveService{
                 @InjectRepository(KycOfficeEntity)
                 private kycOfficeRepository: Repository<KycOfficeEntity>,
                 @InjectRepository(KycExecutiveEntity)
-                private kycExecutivesRepository: Repository<KycExecutiveEntity>){}
+                private kycExecutivesRepository: Repository<KycExecutiveEntity>,
+                private kycMessagesService: KycMessagesService){}
 
 
     
-    contractServiceForCustomer(requestData: RequestData<AddCustomerContractServiceReq>): Promise<ResponseData<boolean>>{
+    async contractServiceForCustomer(requestData: RequestData<AddCustomerContractServiceReq>): Promise<ResponseData<boolean>>{
 
+        const req: AddCustomerContractServiceReq = requestData.data!;
+        const auth: JwtData = requestData.auth!;
+        const channel = auth.channel;
+        const idOffice = req.idOffice;
 
+        req.contractedServices.map( service => {
+
+            //this.getKycChannel(service.id);
+        });
+
+        const promiseOffice: Promise<KycOfficeEntity> = this.getKycOffice(idOffice);
+        const promiseChannel: Promise<KycChannelEntity> = this.getKycChannel(channel);
+
+        const [channelEntity, officeEntity] = await Promise.all([promiseChannel,promiseOffice]);
+
+        console.log(channelEntity.description);
+        console.log(officeEntity.name);
 
         return Promise.resolve({
             data: true
@@ -51,7 +73,7 @@ export class ExecutiveService{
         });
     }
 
-    private getChannel(idChannel: number) : Promise<KycChannelEntity> {
+    private async getKycChannel(idChannel: number) : Promise<KycChannelEntity> {
 
         return this.kycChannelRepository.findBy({id: idChannel})
         .then(results => {
@@ -60,13 +82,47 @@ export class ExecutiveService{
                 return results[0];
             }
             else{
-                throw new HttpException({
-                    response: {
-                        
-                    }
-                },
-                HttpStatus.UNPROCESSABLE_ENTITY)
+                throw this.getKycRestException(MessageCodes.INVALID_REQUEST, `The channel ${idChannel} is invalid.`,HttpStatus.BAD_REQUEST);
             }
         })
+    }
+
+    private async getKycService(idService: number) : Promise<KycServicesEntity> {
+
+        return this.kycServicesRepository.findBy({id: idService})
+        .then(results => {
+
+            if(results.length>0){
+                return results[0];
+            }
+            else{
+                throw this.getKycRestException(MessageCodes.INVALID_REQUEST, `The id for service ${idService} is invalid.`,HttpStatus.BAD_REQUEST);
+            }
+        })
+    }
+
+    private async getKycOffice(idOffice: number) : Promise<KycOfficeEntity> {
+
+        return this.kycOfficeRepository.findBy({id: idOffice})
+        .then(results => {
+
+            if(results.length>0){
+                return results[0];
+            }
+            else{
+                throw this.getKycRestException(MessageCodes.INVALID_REQUEST, `The office ${idOffice} is invalid.`,HttpStatus.BAD_REQUEST);
+            }
+        })
+    }
+
+    private getKycRestException(code: string, complement: string = '',status:HttpStatus): KycRestException{
+
+        const notification: Notification = this.kycMessagesService.getMessage(code);
+        notification.message = `${notification.message}. ${complement}`.trim();
+        return new KycRestException(
+            {
+               message: notification,
+               status
+            })
     }
 }

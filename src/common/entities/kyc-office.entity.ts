@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm'
 
-@Entity({name: 'kyc_offices'})
+@Entity({name: 'kyc_office'})
 export default class KycOfficeEntity{
 
     @PrimaryGeneratedColumn()

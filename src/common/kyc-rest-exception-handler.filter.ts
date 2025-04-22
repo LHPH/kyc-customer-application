@@ -5,6 +5,7 @@ import { KycMessagesService } from './services/kyc-message.service';
 import { MessageCodes } from './enums/message-codes.enum';
 import { Notification } from './interfaces/notification';
 import { ResponseData } from './interfaces/response-data';
+import { KycRestException } from './exception/kyc-rest-exception.exception';
 
 @Catch()
 export class KycRestExceptionHandler<T extends HttpException | TypeORMError> implements ExceptionFilter{
@@ -25,6 +26,11 @@ export class KycRestExceptionHandler<T extends HttpException | TypeORMError> imp
 
             status = HttpStatus.SERVICE_UNAVAILABLE;
             notification = this.kycMessagesService.getMessage(MessageCodes.UNAVAILABLE_OPERATION);
+        }
+        else if(exception instanceof KycRestException){
+            const restExc: KycRestException = exception;
+            notification = restExc.params.message ?? this.kycMessagesService.getMessage(MessageCodes.UNEXPECTED_ERROR);
+            status = restExc.params.status;
         }
         else{
             notification = this.kycMessagesService.getMessage(MessageCodes.UNEXPECTED_ERROR);

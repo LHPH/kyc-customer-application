@@ -41,18 +41,43 @@ export class ExecutiveService{
         const channel = auth.channel;
         const idOffice = req.idOffice;
 
-        req.contractedServices.map( service => {
+        let servicesEntities = [];
 
-            //this.getKycChannel(service.id);
-        });
+        for(const service of req.contractedServices){
+
+            let serviceEntity: KycServicesEntity = await this.getKycService(service.id);
+            servicesEntities.push(serviceEntity);
+            await this.checkIfServiceIsNotContracted(req.customerId, service.id);
+        }
 
         const promiseOffice: Promise<KycOfficeEntity> = this.getKycOffice(idOffice);
         const promiseChannel: Promise<KycChannelEntity> = this.getKycChannel(channel);
+        const promiseExecutive: Promise<KycExecutiveEntity> = this.getKycExecutive(auth.owner);
 
-        const [channelEntity, officeEntity] = await Promise.all([promiseChannel,promiseOffice]);
+        const [channelEntity, officeEntity, executiveEntity] = await Promise.all([promiseChannel,promiseOffice,promiseExecutive]);
 
-        console.log(channelEntity.description);
-        console.log(officeEntity.name);
+        servicesEntities.map((service, index) => {
+
+            const promotionalCode = req.contractedServices.at(index)?.promotionalCode ?? null;
+
+            let discount = 0;
+            if(promotionalCode){
+                discount = 10;
+            }
+
+            let contractedService: KycCustomerServiceEntity = {
+                service,
+                promotionalCode,
+                serviceCost: service.cost - ((service.cost * discount) / 100),
+                channel: channelEntity,
+                office: officeEntity,
+                active: true,
+                idCustomer: req.customerId,
+                executive: executiveEntity
+            }
+            console.log(contractedService);
+
+        });
 
         return Promise.resolve({
             data: true
@@ -78,7 +103,7 @@ export class ExecutiveService{
         return this.kycChannelRepository.findBy({id: idChannel})
         .then(results => {
 
-            if(results.length>0){
+            if(results.length){
                 return results[0];
             }
             else{
@@ -92,7 +117,7 @@ export class ExecutiveService{
         return this.kycServicesRepository.findBy({id: idService})
         .then(results => {
 
-            if(results.length>0){
+            if(results.length){
                 return results[0];
             }
             else{
@@ -106,7 +131,7 @@ export class ExecutiveService{
         return this.kycOfficeRepository.findBy({id: idOffice})
         .then(results => {
 
-            if(results.length>0){
+            if(results.length){
                 return results[0];
             }
             else{
@@ -115,7 +140,38 @@ export class ExecutiveService{
         })
     }
 
-    private getKycRestException(code: string, complement: string = '',status:HttpStatus): KycRestException{
+    private async getKycExecutive(idExecutive: number) : Promise<KycExecutiveEntity> {
+
+        return this.kycExecutivesRepository.findBy({id: idExecutive})
+        .then(results => {
+
+            if(results.length){
+                return results[0];
+            }
+            else{
+                throw this.getKycRestException(MessageCodes.INVALID_REQUEST, `The executive ${idExecutive} is invalid.`,HttpStatus.BAD_REQUEST);
+            }
+        })
+    }
+
+    private async checkIfServiceIsNotContracted(idCustomer: number, idService: number){
+
+        return this.kycCustomerServiceRepository.findBy({
+            idCustomer,
+            service: {
+                id: idService
+            },
+            active: true
+        })
+        .then(results => {
+            if(results.length){
+                throw this.getKycRestException(MessageCodes.SERVICE_ALREADY_ACQUIRED,null,HttpStatus.UNPROCESSABLE_ENTITY);
+            }
+            return;
+        });
+    }
+
+    private getKycRestException(code: string, complement: string | null = '',status:HttpStatus): KycRestException{
 
         const notification: Message = this.kycMessagesService.getMessage(code);
         notification.message = `${notification.message}. ${complement}`.trim();

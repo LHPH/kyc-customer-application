@@ -27,9 +27,9 @@ export class CustomerService{
             results.map(element => {
                 
                 service = {
-                    id: element.id,
+                    id: element.id!,
                     idService: element.service.id,
-                    service: element.service.description,
+                    service: element.service.name,
                     cost: element.serviceCost,
                     idChannel: element.channel.id,
                     channel: element.channel.description,
@@ -38,7 +38,7 @@ export class CustomerService{
                     active: element.active,
                     idExecutive: element.executive.id,
                     executive: element.executive.firstName,
-                    creationDate: element.creationDate,
+                    creationDate: element.creationDate!,
                     modificationDate: element.modificationDate
                 }
                 arr[arr.length] = service;

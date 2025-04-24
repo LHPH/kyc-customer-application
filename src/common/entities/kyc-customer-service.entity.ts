@@ -1,4 +1,4 @@
-import { Entity, Column, JoinColumn, OneToOne, PrimaryGeneratedColumn} from 'typeorm'
+import { Entity, Column, JoinColumn, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn} from 'typeorm'
 import KycServicesEntity from './kyc-services.entity';
 import KycChannelEntity from './kyc-channel.entity';
 import KycOfficeEntity from './kyc-office.entity';
@@ -8,14 +8,17 @@ import KycExecutiveEntity from './kyc-executive.entity';
 export class KycCustomerServiceEntity{
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
+
+    @Column()
+    folio: number;
 
     @OneToOne(() => KycServicesEntity)
     @JoinColumn({name: 'id_service',referencedColumnName: 'id'})
     service: KycServicesEntity
 
-    @Column({name: 'promotional_code'})
-    promotionalCode: string;
+    @Column({name: 'promotional_code', type: 'varchar', nullable: true })
+    promotionalCode: string | null;
 
     @Column({name: 'service_cost'})
     serviceCost: number;
@@ -38,9 +41,11 @@ export class KycCustomerServiceEntity{
     @JoinColumn({name: 'id_executive',referencedColumnName: 'id'})
     executive: KycExecutiveEntity
 
+    @CreateDateColumn()
     @Column({name: 'creation_date'})
-    creationDate: Date;
+    creationDate?: Date;
 
+    @UpdateDateColumn()
     @Column({name: 'modification_date'})
-    modificationDate: Date;
+    modificationDate?: Date;
 }

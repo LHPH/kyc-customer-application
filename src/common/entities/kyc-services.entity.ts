@@ -7,5 +7,8 @@ export default class KycServicesEntity{
     id: number;
 
     @Column()
-    description: string;
+    name: string;
+
+    @Column()
+    cost: number;
 }

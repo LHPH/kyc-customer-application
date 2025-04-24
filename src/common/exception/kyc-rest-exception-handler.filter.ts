@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { TypeORMError } from "typeorm";
 import { KycMessagesService } from '../services/kyc-message.service';
 import { MessageCodes } from '../enums/message-codes.enum';
-import { Notification } from '../interfaces/message';
+import { Message } from '../interfaces/message';
 import { ResponseData } from '../interfaces/response-data';
 import { KycRestException } from './kyc-rest-exception.exception';
 
@@ -19,7 +19,7 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
 
-        let notification: Notification;
+        let notification: Message;
         let status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if(exception instanceof TypeORMError){

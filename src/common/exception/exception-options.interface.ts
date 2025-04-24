@@ -1,7 +1,7 @@
-import { Notification } from "../interfaces/message";
+import { Message } from "../interfaces/message";
 
 export interface ExceptionOptions{
 
-    message?: Notification,
+    message?: Message,
     status: number
 }

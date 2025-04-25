@@ -1,45 +1,25 @@
-import { Entity, Column, JoinColumn, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn} from 'typeorm'
+import { Entity, Column, JoinColumn, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne} from 'typeorm'
 import KycServicesEntity from './kyc-services.entity';
-import KycChannelEntity from './kyc-channel.entity';
-import KycOfficeEntity from './kyc-office.entity';
-import KycExecutiveEntity from './kyc-executive.entity';
+import KycCustomerApplicationEntity from './kyc-customer-application.entity';
 
 @Entity({name: 'kyc_customer_service'})
-export class KycCustomerServiceEntity{
+export default class KycCustomerServiceEntity{
 
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @Column()
-    folio: number;
+    @ManyToOne(() => KycCustomerApplicationEntity, (application) => application.services)
+    @JoinColumn({name: 'folio', referencedColumnName: 'id'})
+    folio: KycCustomerApplicationEntity;
 
     @OneToOne(() => KycServicesEntity)
     @JoinColumn({name: 'id_service',referencedColumnName: 'id'})
     service: KycServicesEntity
 
-    @Column({name: 'promotional_code', type: 'varchar', nullable: true })
-    promotionalCode: string | null;
-
     @Column({name: 'service_cost'})
     serviceCost: number;
 
-    @OneToOne(() => KycChannelEntity)
-    @JoinColumn({name: 'id_channel',referencedColumnName: 'id'})
-    channel: KycChannelEntity
-
-    @OneToOne(() => KycOfficeEntity)
-    @JoinColumn({name: 'id_office',referencedColumnName: 'id'})
-    office: KycOfficeEntity
-
-    @Column()
     active: boolean;
-
-    @Column({name: 'id_customer'})
-    idCustomer: number;
-
-    @OneToOne(() => KycExecutiveEntity)
-    @JoinColumn({name: 'id_executive',referencedColumnName: 'id'})
-    executive: KycExecutiveEntity
 
     @CreateDateColumn()
     @Column({name: 'creation_date'})

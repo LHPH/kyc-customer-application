@@ -1,6 +1,6 @@
 import { Controller, Post, Param, Body, Req } from "@nestjs/common";
 import { Request } from 'express';
-import { ExecutiveService } from "./executives.service";
+import { ExecutiveService } from "./services/executives.service";
 import { AddCustomerContractServiceReq } from "src/executives/interfaces/add-customer-contract-services.interface";
 import { AdjustCustomerContractServiceReq } from "src/executives/interfaces/update-customer-contract-service.interfaces";
 import { StatusCustomerContractServiceReq } from "src/executives/interfaces/status-customer-contract-service.interfaces";

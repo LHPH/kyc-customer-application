@@ -1,12 +1,12 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { KycCustomerServiceEntity } from 'src/common/entities/kyc-customer-service.entity';
+import  KycCustomerServiceEntity  from 'src/common/entities/kyc-customer-service.entity';
 import { ResponseData } from "src/common/interfaces/response-data";
 import RequestData from "src/common/interfaces/request-data.interface";
-import { AddCustomerContractServiceReq } from "./interfaces/add-customer-contract-services.interface";
-import { AdjustCustomerContractServiceReq } from "./interfaces/update-customer-contract-service.interfaces";
-import { StatusCustomerContractServiceReq } from "./interfaces/status-customer-contract-service.interfaces";
+import { AddCustomerContractServiceReq } from "../interfaces/add-customer-contract-services.interface";
+import { AdjustCustomerContractServiceReq } from "../interfaces/update-customer-contract-service.interfaces";
+import { StatusCustomerContractServiceReq } from "../interfaces/status-customer-contract-service.interfaces";
 import KycChannelEntity from "src/common/entities/kyc-channel.entity";
 import KycOfficeEntity from "src/common/entities/kyc-office.entity";
 import KycExecutiveEntity from "src/common/entities/kyc-executive.entity";
@@ -16,11 +16,15 @@ import { KycRestException } from "src/common/exception/kyc-rest-exception.except
 import { KycMessagesService } from "src/common/services/kyc-message.service";
 import { Message } from "src/common/interfaces/message";
 import { MessageCodes } from "src/common/enums/message-codes.enum";
+import KycCustomerEntity from "src/common/entities/kyc-customer.entity";
+import KycCustomerApplicationEntity from "src/common/entities/kyc-customer-application.entity";
 
 @Injectable()
 export class ExecutiveService{
 
-    constructor(@InjectRepository(KycCustomerServiceEntity)
+    constructor(@InjectRepository(KycCustomerApplicationEntity)
+                private kycCustomerApplicationRepository: Repository<KycCustomerApplicationEntity>,
+                @InjectRepository(KycCustomerServiceEntity)
                 private kycCustomerServiceRepository: Repository<KycCustomerServiceEntity>,
                 @InjectRepository(KycChannelEntity)
                 private kycChannelRepository: Repository<KycChannelEntity>,
@@ -28,6 +32,8 @@ export class ExecutiveService{
                 private kycServicesRepository: Repository<KycServicesEntity>,
                 @InjectRepository(KycOfficeEntity)
                 private kycOfficeRepository: Repository<KycOfficeEntity>,
+                @InjectRepository(KycCustomerEntity)
+                private kycCustomerRepository: Repository<KycCustomerEntity>,
                 @InjectRepository(KycExecutiveEntity)
                 private kycExecutivesRepository: Repository<KycExecutiveEntity>,
                 private kycMessagesService: KycMessagesService){}
@@ -53,12 +59,23 @@ export class ExecutiveService{
         const promiseOffice: Promise<KycOfficeEntity> = this.getKycOffice(idOffice);
         const promiseChannel: Promise<KycChannelEntity> = this.getKycChannel(channel);
         const promiseExecutive: Promise<KycExecutiveEntity> = this.getKycExecutive(auth.owner);
+        const promiseCustomer: Promise<KycCustomerEntity> = this.getKycCustomer(req.customerId);
 
-        const [channelEntity, officeEntity, executiveEntity] = await Promise.all([promiseChannel,promiseOffice,promiseExecutive]);
+        const [channelEntity, officeEntity, executiveEntity, customerEntity] 
+            = await Promise.all([promiseChannel,promiseOffice,promiseExecutive, promiseCustomer]);
+
+        const promotionalCode = req.promotionalCode ?? null;
+        
+        let application: KycCustomerApplicationEntity = {
+            promotionalCode, 
+            channel: channelEntity,
+            office: officeEntity,
+            customer: customerEntity,
+            executive: executiveEntity,
+            services: []
+        }    
 
         servicesEntities.map((service, index) => {
-
-            const promotionalCode = req.contractedServices.at(index)?.promotionalCode ?? null;
 
             let discount = 0;
             if(promotionalCode){
@@ -67,17 +84,15 @@ export class ExecutiveService{
 
             let contractedService: KycCustomerServiceEntity = {
                 service,
-                promotionalCode,
+                folio: application,
                 serviceCost: service.cost - ((service.cost * discount) / 100),
-                channel: channelEntity,
-                office: officeEntity,
-                active: true,
-                idCustomer: req.customerId,
-                executive: executiveEntity
+                active: true
             }
-            console.log(contractedService);
 
+            application.services.push(contractedService);
         });
+
+        console.log(application);
 
         return Promise.resolve({
             data: true
@@ -154,15 +169,41 @@ export class ExecutiveService{
         })
     }
 
+    private async getKycCustomer(idCustomer: number) : Promise<KycCustomerEntity> {
+
+        return this.kycCustomerRepository.findBy({id: idCustomer})
+        .then(results => {
+
+            if(results.length){
+                return results[0];
+            }
+            else{
+                throw this.getKycRestException(MessageCodes.INVALID_REQUEST,'',HttpStatus.BAD_REQUEST);
+            }
+        })
+    }
+
+
+
     private async checkIfServiceIsNotContracted(idCustomer: number, idService: number){
 
-        return this.kycCustomerServiceRepository.findBy({
-            idCustomer,
-            service: {
-                id: idService
-            },
-            active: true
-        })
+        return this.kycCustomerApplicationRepository.find(
+            {
+                relations:{
+                    services: true
+                },
+                where: {
+                    customer: {
+                        id: idCustomer
+                    },
+                    services:{
+                        service:{
+                            id: idService
+                        },
+                        active: true
+                    }
+                }
+            })
         .then(results => {
             if(results.length){
                 throw this.getKycRestException(MessageCodes.SERVICE_ALREADY_ACQUIRED,null,HttpStatus.UNPROCESSABLE_ENTITY);

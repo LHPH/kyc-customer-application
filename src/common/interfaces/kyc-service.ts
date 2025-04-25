@@ -1,8 +1,9 @@
 
 export interface KycService{
 
-    id: number,
-    idService: number,
+    folio: number;
+    serviceSequential: number,
+    serviceType: number,
     service: string,
     promotionalCode?: string,
     cost: number,

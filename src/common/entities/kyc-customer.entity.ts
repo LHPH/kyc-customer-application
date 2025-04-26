@@ -1,9 +1,9 @@
-import { Entity, Column} from 'typeorm'
+import { Entity, Column,PrimaryColumn} from 'typeorm'
 
 @Entity({name: 'kyc_customer'})
 export default class KycCustomerEntity{
 
-    @Column()
+    @PrimaryColumn()
     id: number;
 
     @Column({name: 'first_name'})
@@ -18,7 +18,9 @@ export default class KycCustomerEntity{
     @Column({name: 'second_last_name',type: 'varchar', nullable: true})
     secondLastName: string | null;
 
+    @Column()
     rfc: string;
 
+    @Column()
     active: boolean;
 }

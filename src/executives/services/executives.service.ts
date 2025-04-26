@@ -93,6 +93,7 @@ export class ExecutiveService{
         });
 
         console.log(application);
+        console.log(application.services);
 
         return Promise.resolve({
             data: true

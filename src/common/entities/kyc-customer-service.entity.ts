@@ -19,6 +19,7 @@ export default class KycCustomerServiceEntity{
     @Column({name: 'service_cost'})
     serviceCost: number;
 
+    @Column()
     active: boolean;
 
     @CreateDateColumn()

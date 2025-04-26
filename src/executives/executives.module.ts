@@ -10,6 +10,8 @@ import KycExecutiveEntity from 'src/common/entities/kyc-executive.entity';
 import KycOfficeEntity from 'src/common/entities/kyc-office.entity';
 import KycCustomerApplicationEntity from 'src/common/entities/kyc-customer-application.entity';
 import KycCustomerEntity from 'src/common/entities/kyc-customer.entity';
+import ExecutiveDatabaseService from './services/executive-database.service';
+import ExecutiveDocumentService from './services/executive-document.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([
@@ -23,6 +25,6 @@ import KycCustomerEntity from 'src/common/entities/kyc-customer.entity';
     ]),
      CommonModule],
     controllers: [ExecutiveController],
-    providers: [ExecutiveService]
+    providers: [ExecutiveService,ExecutiveDatabaseService,ExecutiveDocumentService]
 })
 export class ExecutivesModule {}

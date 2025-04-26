@@ -1,7 +1,7 @@
 import { Controller, Post, Param, Body, Req } from "@nestjs/common";
 import { Request } from 'express';
 import { ExecutiveService } from "./services/executives.service";
-import { AddCustomerContractServiceReq } from "src/executives/interfaces/add-customer-contract-services.interface";
+import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "src/executives/interfaces/add-customer-contract-services.interface";
 import { AdjustCustomerContractServiceReq } from "src/executives/interfaces/update-customer-contract-service.interfaces";
 import { StatusCustomerContractServiceReq } from "src/executives/interfaces/status-customer-contract-service.interfaces";
 import { ResponseData } from "src/common/interfaces/response-data";
@@ -16,7 +16,7 @@ export class ExecutiveController{
     @Post('/service-contract/fulfillment')
     contractServiceForCustomer(
         @Req() req: Request,
-        @Body() bodyReq: AddCustomerContractServiceReq): Promise<ResponseData<boolean>> {
+        @Body() bodyReq: AddCustomerContractServiceReq): Promise<ResponseData<AddCustomerContractServiceResp>> {
 
             const requestData: RequestData<AddCustomerContractServiceReq> = {
                 auth: {
@@ -39,7 +39,7 @@ export class ExecutiveController{
 
             const requestData: RequestData<AdjustCustomerContractServiceReq> = {
                 params: {
-                    'id': id
+                    id
                 },
                 auth: {
                     owner: 1,
@@ -61,7 +61,7 @@ export class ExecutiveController{
 
             const requestData: RequestData<StatusCustomerContractServiceReq> = {
                 params: {
-                    'id': id
+                    id
                 },
                 auth: {
                     owner: 1,

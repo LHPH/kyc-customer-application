@@ -11,3 +11,8 @@ export interface CustomerContractService{
 
     id: number
 }
+
+export interface AddCustomerContractServiceResp{
+
+    folio: number;
+}

@@ -23,3 +23,6 @@ kyc-messages:
       "005":
         code: KYC-CUSTOMER-SERVICE-005
         message: The customer has already contracted one of the services to acquire
+      "006":
+        code: KYC-CUSTOMER-SERVICE-006
+        message: The service is not acquired or is inactive for the customer

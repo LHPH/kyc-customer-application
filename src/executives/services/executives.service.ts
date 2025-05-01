@@ -21,35 +21,33 @@ export class ExecutiveService{
 
     async contractServiceForCustomer(requestData: RequestData<AddCustomerContractServiceReq>): Promise<ResponseData<AddCustomerContractServiceResp>>{
 
-        return Promise.resolve({
-            data: {
-                folio: await this.executiveDatabaseSerivce.registerServices(requestData)
-            }
-        });
+        return this.executiveDatabaseSerivce.registerServices(requestData)
+            .then(folio => {
+                return {
+                    data: {
+                        folio
+                    }
+                }
+            })
     }
 
-    adjustContractServiceForCustomer(requestData: RequestData<AdjustCustomerContractServiceReq>):  Promise<ResponseData<boolean>>{
+    async adjustContractServiceForCustomer(requestData: RequestData<AdjustCustomerContractServiceReq>):  Promise<ResponseData<boolean>>{
 
-        return Promise.resolve({
-            data: true
-        });
+        return this.executiveDatabaseSerivce.updateCostCustomerService(requestData)
+            .then(result => {
+                return {
+                    data: result
+                }
+            })
     }
 
-    statusContractServiceForCustomer(requestData: RequestData<StatusCustomerContractServiceReq>): Promise<ResponseData<boolean>>{
+    async statusContractServiceForCustomer(requestData: RequestData<StatusCustomerContractServiceReq>): Promise<ResponseData<boolean>>{
 
-        return Promise.resolve({
-            data: true
-        });
-    }
-
-    private getKycRestException(code: string, complement: string | null = '',status:HttpStatus): KycRestException{
-
-        const notification: Message = this.kycMessagesService.getMessage(code);
-        notification.message = `${notification.message}. ${complement}`.trim();
-        return new KycRestException(
-            {
-               message: notification,
-               status
+        return this.executiveDatabaseSerivce.updateStatusCustomerService(requestData)
+            .then(result => {
+                return {
+                    data: result
+                }
             })
     }
 }

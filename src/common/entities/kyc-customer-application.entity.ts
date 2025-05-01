@@ -4,6 +4,7 @@ import KycOfficeEntity from './kyc-office.entity';
 import KycExecutiveEntity from './kyc-executive.entity';
 import KycCustomerEntity from './kyc-customer.entity';
 import KycCustomerServiceEntity from './kyc-customer-service.entity';
+import Promotions from '../interfaces/promotions';
 
 @Entity({name: 'kyc_customer_application'})
 export default class KycCustomerApplicationEntity{
@@ -29,6 +30,12 @@ export default class KycCustomerApplicationEntity{
     @OneToOne(() => KycExecutiveEntity)
     @JoinColumn({name: 'id_executive',referencedColumnName: 'id'})
     executive: KycExecutiveEntity
+
+    @Column({name: 'id_campaign',type: 'number', nullable: true})
+    idOffer?: number | null
+
+    @Column({name: 'promotions', type: 'jsonb'})
+    promotions: Promotions
     
     @CreateDateColumn()
     @Column({name: 'creation_date'})

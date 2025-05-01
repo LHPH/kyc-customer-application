@@ -1,3 +1,4 @@
+import Promotions from "src/common/interfaces/promotions";
 
 export interface AddCustomerContractServiceReq{
 
@@ -5,6 +6,8 @@ export interface AddCustomerContractServiceReq{
     promotionalCode?: string,
     contractedServices: CustomerContractService[],
     idOffice: number,
+    idOffer?: number,
+    promotions: Promotions
 }
 
 export interface CustomerContractService{

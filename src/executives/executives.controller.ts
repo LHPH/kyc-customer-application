@@ -31,6 +31,12 @@ export class ExecutiveController{
             return this.executiveService.contractServiceForCustomer(requestData);
     }
 
+    @Post('/service-contract/document')
+    generateDocuments(@Req() req: Request){
+
+        return true;
+    }
+
     @Post('/service-contract/{:id}/adjustment')
     adjustContractServiceForCustomer(
         @Req() req: Request,

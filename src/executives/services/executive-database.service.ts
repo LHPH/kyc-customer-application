@@ -19,6 +19,7 @@ import { AddCustomerContractServiceReq } from '../interfaces/add-customer-contra
 import JwtData from 'src/common/interfaces/jwt-data.interface';
 import { KycRestException } from 'src/common/exception/kyc-rest-exception.exception';
 import { AdjustCustomerContractServiceReq } from '../interfaces/update-customer-contract-service.interfaces';
+import { StatusCustomerContractServiceReq } from '../interfaces/status-customer-contract-service.interfaces';
 
 @Injectable()
 export default class ExecutiveDatabaseService {
@@ -79,6 +80,8 @@ export default class ExecutiveDatabaseService {
         office: officeEntity,
         customer: customerEntity,
         executive: executiveEntity,
+        idOffer: req.idOffer,
+        promotions: req.promotions,
         services: [],
         };
 
@@ -101,20 +104,39 @@ export default class ExecutiveDatabaseService {
         console.log(application);
         console.log(application.services);
 
-        return Promise.resolve(123); 
+        return this.kycCustomerApplicationRepository.save(application)
+            .then(result => result.id! );
     }
 
-    async updateCustomerService(requestData: RequestData<AdjustCustomerContractServiceReq>){
+    async updateCostCustomerService(requestData: RequestData<AdjustCustomerContractServiceReq>): Promise<boolean>{
         
         const req: AdjustCustomerContractServiceReq = requestData.data!;
         const seqService: number =  requestData.params?.id
 
-        let customerService = this.getKycCustomerServiceByIdCustomerAndSeqService(req.customerId,seqService);
+        let customerService: KycCustomerServiceEntity = await this.getKycCustomerServiceByIdCustomerAndSeqService(req.customerId,seqService);
 
+        customerService.serviceCost = req.cost;
 
+        console.log(customerService);
+
+        return this.kycCustomerServiceRepository.update({id: customerService.id}, {serviceCost: req.cost})
+            .then(result => !! result.affected );
     }
 
+    async updateStatusCustomerService(requestData: RequestData<StatusCustomerContractServiceReq>){
 
+        const req: StatusCustomerContractServiceReq = requestData.data!;
+        const seqService: number = requestData.params?.id;
+
+        let customerService: KycCustomerServiceEntity = await this.getKycCustomerServiceByIdCustomerAndSeqService(req.customerId,seqService);
+
+        customerService.active = req.active;
+
+        console.log(customerService);
+
+        return this.kycCustomerServiceRepository.update({id: customerService.id}, {active: req.active})
+            .then(result => !! result.affected );
+    }
 
     private async getKycChannel(idChannel: number) : Promise<KycChannelEntity> {
 
@@ -186,7 +208,7 @@ export default class ExecutiveDatabaseService {
         })
     }
 
-    async getKycCustomerServiceByIdCustomerAndSeqService(idCustomer: number, sequenceService: number): Promise<KycCustomerServiceEntity | undefined>{
+    async getKycCustomerServiceByIdCustomerAndSeqService(idCustomer: number, sequenceService: number): Promise<KycCustomerServiceEntity>{
 
         return this.kycCustomerServiceRepository.find({
             where: {
@@ -202,7 +224,7 @@ export default class ExecutiveDatabaseService {
         .then(results => {
 
             if(results.length){
-                return results.at(0);
+                return results[0];
             }
             throw this.getKycRestException(MessageCodes.SERVICE_NOT_ACQUIRED_OR_INACTIVE,null,HttpStatus.UNPROCESSABLE_ENTITY);
         });

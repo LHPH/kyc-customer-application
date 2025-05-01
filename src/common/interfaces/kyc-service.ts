@@ -1,3 +1,4 @@
+import Promotions from "./promotions";
 
 export interface KycService{
 
@@ -14,6 +15,8 @@ export interface KycService{
     active: boolean,
     idExecutive: number
     executive: string,
+    idOffer?: number | null,
+    promotions: Promotions
     creationDate: Date,
     modificationDate?: Date
 }

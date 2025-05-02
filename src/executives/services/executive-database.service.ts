@@ -20,6 +20,8 @@ import JwtData from 'src/common/interfaces/jwt-data.interface';
 import { KycRestException } from 'src/common/exception/kyc-rest-exception.exception';
 import { AdjustCustomerContractServiceReq } from '../interfaces/update-customer-contract-service.interfaces';
 import { StatusCustomerContractServiceReq } from '../interfaces/status-customer-contract-service.interfaces';
+import KycCampaignEntity from 'src/common/entities/kyc-campaign';
+import KycOfferEntity from 'src/common/entities/kyc-offer';
 
 @Injectable()
 export default class ExecutiveDatabaseService {
@@ -39,6 +41,8 @@ export default class ExecutiveDatabaseService {
         private kycCustomerRepository: Repository<KycCustomerEntity>,
         @InjectRepository(KycExecutiveEntity)
         private kycExecutivesRepository: Repository<KycExecutiveEntity>,
+        @InjectRepository(KycOfferEntity)
+        private kycOfferRepository: Repository<KycOfferEntity>,
         private kycMessagesService: KycMessagesService,
     ) {}
 
@@ -52,24 +56,33 @@ export default class ExecutiveDatabaseService {
         let servicesEntities = [];
 
         for (const service of req.contractedServices) {
-        let serviceEntity: KycServicesEntity = await this.getKycService(
-            service.id,
-        );
-        servicesEntities.push(serviceEntity);
-        await this.checkIfServiceIsNotContracted(req.customerId, service.id);
+            let serviceEntity: KycServicesEntity = await this.getKycService(
+                service.id,
+            );
+            servicesEntities.push(serviceEntity);
+            await this.checkIfServiceIsNotContracted(req.customerId, service.id);
         }
 
         const promiseOffice: Promise<KycOfficeEntity> = this.getKycOffice(idOffice);
         const promiseChannel: Promise<KycChannelEntity> = this.getKycChannel(channel);
         const promiseExecutive: Promise<KycExecutiveEntity> = this.getKycExecutive(auth.owner);
         const promiseCustomer: Promise<KycCustomerEntity> = this.getKycCustomer(req.customerId);
+        let promiseOffer: Promise<KycOfferEntity|null>;
 
-        const [channelEntity, officeEntity, executiveEntity, customerEntity] =
+        if(req.idOffer){
+            promiseOffer = this.getKycOffer(req.idOffer);
+        }
+        else{
+            promiseOffer = Promise.resolve(null);
+        }
+
+        const [channelEntity, officeEntity, executiveEntity, customerEntity, offerEntity] =
         await Promise.all([
             promiseChannel,
             promiseOffice,
             promiseExecutive,
             promiseCustomer,
+            promiseOffer
         ]);
 
         const promotionalCode = req.promotionalCode ?? null;
@@ -80,7 +93,7 @@ export default class ExecutiveDatabaseService {
         office: officeEntity,
         customer: customerEntity,
         executive: executiveEntity,
-        idOffer: req.idOffer,
+        offer: offerEntity,
         promotions: req.promotions,
         services: [],
         };
@@ -206,6 +219,22 @@ export default class ExecutiveDatabaseService {
                 throw this.getKycRestException(MessageCodes.INVALID_REQUEST,'',HttpStatus.BAD_REQUEST);
             }
         })
+    }
+
+    private async getKycOffer(idOffer: number) : Promise<KycOfferEntity> {
+
+        return this.kycOfferRepository.findBy({
+            id: idOffer,
+            status: 1
+        })
+        .then(results => {
+            if(results.length){
+                return results[0];
+            }
+            else{
+                throw this.getKycRestException(MessageCodes.INVALID_REQUEST,'The offer is not valid',HttpStatus.BAD_REQUEST);
+            }
+        });
     }
 
     async getKycCustomerServiceByIdCustomerAndSeqService(idCustomer: number, sequenceService: number): Promise<KycCustomerServiceEntity>{

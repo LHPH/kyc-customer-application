@@ -12,6 +12,8 @@ import KycCustomerApplicationEntity from 'src/common/entities/kyc-customer-appli
 import KycCustomerEntity from 'src/common/entities/kyc-customer.entity';
 import ExecutiveDatabaseService from './services/executive-database.service';
 import ExecutiveDocumentService from './services/executive-document.service';
+import KycOfferEntity from 'src/common/entities/kyc-offer';
+import KycCampaignEntity from 'src/common/entities/kyc-campaign';
 
 @Module({
     imports: [TypeOrmModule.forFeature([
@@ -21,7 +23,9 @@ import ExecutiveDocumentService from './services/executive-document.service';
         KycExecutiveEntity, 
         KycOfficeEntity, 
         KycCustomerApplicationEntity,
-        KycCustomerEntity
+        KycCustomerEntity,
+        KycOfferEntity,
+        KycCampaignEntity
     ]),
      CommonModule],
     controllers: [ExecutiveController],

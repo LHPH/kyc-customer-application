@@ -12,7 +12,10 @@ export default class KycCustomerServiceEntity{
     @JoinColumn({name: 'folio', referencedColumnName: 'id'})
     folio: KycCustomerApplicationEntity;
 
-    @OneToOne(() => KycServicesEntity)
+    @OneToOne(() => KycServicesEntity,
+    {
+        eager: true
+    })
     @JoinColumn({name: 'id_service',referencedColumnName: 'id'})
     service: KycServicesEntity
 
@@ -22,11 +25,9 @@ export default class KycCustomerServiceEntity{
     @Column()
     active: boolean;
 
-    @CreateDateColumn()
-    @Column({name: 'creation_date'})
+    @CreateDateColumn({name: 'creation_date', type: 'timestamp', default: () => 'NOW()'})
     creationDate?: Date;
 
-    @UpdateDateColumn()
-    @Column({name: 'modification_date'})
+    @UpdateDateColumn({name: 'modification_date', type: 'timestamp', default: () => 'NOW()'})
     modificationDate?: Date;
 }

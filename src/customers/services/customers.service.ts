@@ -53,8 +53,9 @@ export class CustomerService{
                         office: application.office.name,
                         active: recordService.active,
                         idExecutive: application.executive.id,
-                        executive: application.executive.firstName,
+                        executive: `${application.executive.firstName} ${application.executive.lastName}`,
                         idOffer: application.offer?.id,
+                        campaign: application.offer?.campaign.campaignName,
                         promotions: application.promotions,
                         creationDate: recordService.creationDate!,
                         modificationDate: recordService.modificationDate

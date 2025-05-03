@@ -1,4 +1,5 @@
-import { Entity, Column,PrimaryColumn} from 'typeorm'
+import { Entity, Column,PrimaryColumn, OneToOne, JoinColumn} from 'typeorm'
+import KycCustomerAddressEntity from './kyc-customer-address';
 
 @Entity({name: 'kyc_customer'})
 export default class KycCustomerEntity{
@@ -23,4 +24,8 @@ export default class KycCustomerEntity{
 
     @Column()
     active: boolean;
+
+    @OneToOne(() => KycCustomerAddressEntity, { eager: true })
+    @JoinColumn({name: 'id', referencedColumnName: 'idCustomer'})
+    address: KycCustomerAddressEntity;
 }

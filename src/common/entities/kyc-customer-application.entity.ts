@@ -16,31 +16,30 @@ export default class KycCustomerApplicationEntity{
     @Column({name: 'promotional_code', type: 'varchar', nullable: true })
     promotionalCode: string | null;
 
-    @OneToOne(() => KycChannelEntity)
+    @OneToOne(() => KycChannelEntity, { eager: true })
     @JoinColumn({name: 'id_channel',referencedColumnName: 'id'})
     channel: KycChannelEntity
     
-    @OneToOne(() => KycOfficeEntity)
+    @OneToOne(() => KycOfficeEntity, { eager: true })
     @JoinColumn({name: 'id_office',referencedColumnName: 'id'})
     office: KycOfficeEntity
 
-    @OneToOne(() => KycCustomerEntity)
+    @OneToOne(() => KycCustomerEntity, { eager: true })
     @JoinColumn({name: 'id_customer', referencedColumnName: 'id'})
     customer: KycCustomerEntity
 
-    @OneToOne(() => KycExecutiveEntity)
+    @OneToOne(() => KycExecutiveEntity, { eager: true })
     @JoinColumn({name: 'id_executive',referencedColumnName: 'id'})
     executive: KycExecutiveEntity
 
-    @OneToOne(() => KycOfferEntity)
+    @OneToOne(() => KycOfferEntity, { eager: true })
     @JoinColumn({name: 'id_offer',referencedColumnName: 'id'})
     offer?: KycOfferEntity | null
 
     @Column({name: 'promotions', type: 'jsonb'})
     promotions: Promotions
     
-    @CreateDateColumn()
-    @Column({name: 'creation_date'})
+    @CreateDateColumn({name: 'creation_date', type: 'timestamp', default: () => 'NOW()'})
     creationDate?: Date;
 
     @OneToMany(() => KycCustomerServiceEntity, (service) => service.folio, {

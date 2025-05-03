@@ -14,6 +14,7 @@ import ExecutiveDatabaseService from './services/executive-database.service';
 import ExecutiveDocumentService from './services/executive-document.service';
 import KycOfferEntity from 'src/common/entities/kyc-offer';
 import KycCampaignEntity from 'src/common/entities/kyc-campaign';
+import KycCustomerAddressEntity from 'src/common/entities/kyc-customer-address';
 
 @Module({
     imports: [TypeOrmModule.forFeature([
@@ -25,7 +26,8 @@ import KycCampaignEntity from 'src/common/entities/kyc-campaign';
         KycCustomerApplicationEntity,
         KycCustomerEntity,
         KycOfferEntity,
-        KycCampaignEntity
+        KycCampaignEntity,
+        KycCustomerAddressEntity
     ]),
      CommonModule],
     controllers: [ExecutiveController],

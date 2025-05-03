@@ -19,7 +19,7 @@ export default class KycOfferEntity{
     @Column({name: 'status'})
     status: number;
 
-    @ManyToOne(() => KycCampaignEntity, (campaign) => campaign.offers)
+    @ManyToOne(() => KycCampaignEntity, (campaign) => campaign.offers, {eager: true})
     @JoinColumn({name: 'id_campaign', referencedColumnName: 'id'})
     campaign: KycCampaignEntity
 }

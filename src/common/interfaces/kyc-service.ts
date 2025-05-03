@@ -16,6 +16,7 @@ export interface KycService{
     idExecutive: number
     executive: string,
     idOffer?: number | null,
+    campaign?: string,
     promotions: Promotions
     creationDate: Date,
     modificationDate?: Date

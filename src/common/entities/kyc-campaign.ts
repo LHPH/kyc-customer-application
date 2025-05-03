@@ -11,7 +11,6 @@ export default class KycCampaignEntity{
     campaignName: string
 
     @OneToMany(() => KycOfferEntity, (offer) => offer.campaign, {
-        eager: true,
         cascade: false,
     })
     @JoinColumn({name: 'id', referencedColumnName: 'id_campaign'})

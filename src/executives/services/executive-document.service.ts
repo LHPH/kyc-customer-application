@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 import { KycMessagesService } from "src/common/services/kyc-message.service";
-import { Message } from "src/common/interfaces/message";
+import Message  from "src/common/interfaces/message";
 
 @Injectable()
 export default class ExecutiveDocumentService{

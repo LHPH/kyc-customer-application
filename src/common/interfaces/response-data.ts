@@ -1,6 +1,6 @@
-import { Message } from "./message"
+import Message from "./message"
 
-export interface ResponseData<T>{
+export default interface ResponseData<T>{
 
     data: T | null,
     error?: Message | null

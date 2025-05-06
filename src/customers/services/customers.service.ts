@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { KycService } from 'src/common/interfaces/kyc-service';
-import { ResponseData } from 'src/common/interfaces/response-data';
-import  RequestData from 'src/common/interfaces/request-data.interface';
-import  KycCustomerApplicationEntity  from 'src/common/entities/kyc-customer-application.entity';
+import  ResponseData from 'src/common/interfaces/response-data';
+import  RequestData from 'src/common/interfaces/request-data';
+import  KycCustomerApplicationEntity  from 'src/common/entities/kyc-customer-application';
 import { KycMessagesService } from 'src/common/services/kyc-message.service';
 
 @Injectable()

@@ -1,4 +1,4 @@
-export interface Message{
+export default interface Message{
 
     code: string,
     message: string,

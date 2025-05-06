@@ -2,9 +2,9 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logge
 import { Request, Response } from 'express';
 import { TypeORMError } from "typeorm";
 import { KycMessagesService } from '../services/kyc-message.service';
-import { MessageCodes } from '../enums/message-codes.enum';
-import { Message } from '../interfaces/message';
-import { ResponseData } from '../interfaces/response-data';
+import { MessageCodes } from '../enums/message-codes';
+import Message  from '../interfaces/message';
+import ResponseData  from '../interfaces/response-data';
 import { KycRestException } from './kyc-rest-exception.exception';
 
 @Catch()

@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm'
-import KycCustomerServiceEntity  from 'src/common/entities/kyc-customer-service.entity';
+import KycCustomerServiceEntity  from 'src/common/entities/kyc-customer-service';
 import { CommonModule } from 'src/common/common.module';
-import { ExecutiveController } from './executives.controller';
+import { ExecutiveController } from './controllers/executives.controller';
 import { ExecutiveService } from './services/executives.service';
-import KycChannelEntity from 'src/common/entities/kyc-channel.entity';
-import KycServicesEntity from 'src/common/entities/kyc-services.entity';
-import KycExecutiveEntity from 'src/common/entities/kyc-executive.entity';
-import KycOfficeEntity from 'src/common/entities/kyc-office.entity';
-import KycCustomerApplicationEntity from 'src/common/entities/kyc-customer-application.entity';
-import KycCustomerEntity from 'src/common/entities/kyc-customer.entity';
+import KycChannelEntity from 'src/common/entities/kyc-channel';
+import KycServicesEntity from 'src/common/entities/kyc-services';
+import KycExecutiveEntity from 'src/common/entities/kyc-executive';
+import KycOfficeEntity from 'src/common/entities/kyc-office';
+import KycCustomerApplicationEntity from 'src/common/entities/kyc-customer-application';
+import KycCustomerEntity from 'src/common/entities/kyc-customer';
 import ExecutiveDatabaseService from './services/executive-database.service';
 import ExecutiveDocumentService from './services/executive-document.service';
 import KycOfferEntity from 'src/common/entities/kyc-offer';

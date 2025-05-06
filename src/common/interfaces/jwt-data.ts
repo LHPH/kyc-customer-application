@@ -1,4 +1,4 @@
-import { KycUserRole } from "../enums/kyc-user-role.enum";
+import { KycUserRole } from "../enums/kyc-user-role";
 
 
 export default interface JwtData{

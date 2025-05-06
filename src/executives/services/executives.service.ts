@@ -1,13 +1,13 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { ResponseData } from "src/common/interfaces/response-data";
-import RequestData from "src/common/interfaces/request-data.interface";
-import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "../interfaces/add-customer-contract-services.interface";
-import { AdjustCustomerContractServiceReq } from "../interfaces/update-customer-contract-service.interfaces";
-import { StatusCustomerContractServiceReq } from "../interfaces/status-customer-contract-service.interfaces";
+import  ResponseData from "src/common/interfaces/response-data";
+import RequestData from "src/common/interfaces/request-data";
+import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "../interfaces/add-customer-contract-services";
+import { AdjustCustomerContractServiceReq } from "../interfaces/update-customer-contract-service";
+import { StatusCustomerContractServiceReq } from "../interfaces/status-customer-contract-service";
 import { KycRestException } from "src/common/exception/kyc-rest-exception.exception";
 import { KycMessagesService } from "src/common/services/kyc-message.service";
-import { Message } from "src/common/interfaces/message";
-import { MessageCodes } from "src/common/enums/message-codes.enum";
+import  Message  from "src/common/interfaces/message";
+import { MessageCodes } from "src/common/enums/message-codes";
 import ExecutiveDatabaseService from "./executive-database.service";
 import ExecutiveDocumentService from "./executive-document.service";
 

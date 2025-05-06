@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Message } from '../interfaces/message';
+import Message from '../interfaces/message';
 import { ConfigService } from '@nestjs/config';
-import { KycMessageCatalog } from '../interfaces/kyc-messages.interfaces';
+import { KycMessageCatalog } from '../interfaces/kyc-messages';
 
 @Injectable()
 export class KycMessagesService{

@@ -1,12 +1,12 @@
 import { Controller, Post, Param, Body, Req } from "@nestjs/common";
 import { Request } from 'express';
-import { ExecutiveService } from "./services/executives.service";
-import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "src/executives/interfaces/add-customer-contract-services.interface";
-import { AdjustCustomerContractServiceReq } from "src/executives/interfaces/update-customer-contract-service.interfaces";
-import { StatusCustomerContractServiceReq } from "src/executives/interfaces/status-customer-contract-service.interfaces";
-import { ResponseData } from "src/common/interfaces/response-data";
-import RequestData from "src/common/interfaces/request-data.interface";
-import { KycUserRole } from "src/common/enums/kyc-user-role.enum";
+import { ExecutiveService } from "../services/executives.service";
+import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "src/executives/interfaces/add-customer-contract-services";
+import { AdjustCustomerContractServiceReq } from "src/executives/interfaces/update-customer-contract-service";
+import { StatusCustomerContractServiceReq } from "src/executives/interfaces/status-customer-contract-service";
+import ResponseData  from "src/common/interfaces/response-data";
+import RequestData from "src/common/interfaces/request-data";
+import { KycUserRole } from "src/common/enums/kyc-user-role";
 
 @Controller()
 export class ExecutiveController{

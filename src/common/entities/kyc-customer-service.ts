@@ -1,6 +1,6 @@
 import { Entity, Column, JoinColumn, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne} from 'typeorm'
-import KycServicesEntity from './kyc-services.entity';
-import KycCustomerApplicationEntity from './kyc-customer-application.entity';
+import KycServicesEntity from './kyc-services';
+import KycCustomerApplicationEntity from './kyc-customer-application';
 
 @Entity({name: 'kyc_customer_service'})
 export default class KycCustomerServiceEntity{

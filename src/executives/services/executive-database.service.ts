@@ -4,23 +4,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { KycMessagesService } from 'src/common/services/kyc-message.service';
-import { Message } from 'src/common/interfaces/message';
-import { MessageCodes } from 'src/common/enums/message-codes.enum';
+import  Message  from 'src/common/interfaces/message';
+import { MessageCodes } from 'src/common/enums/message-codes';
 
-import KycCustomerServiceEntity from 'src/common/entities/kyc-customer-service.entity';
-import KycChannelEntity from 'src/common/entities/kyc-channel.entity';
-import KycOfficeEntity from 'src/common/entities/kyc-office.entity';
-import KycExecutiveEntity from 'src/common/entities/kyc-executive.entity';
-import KycServicesEntity from 'src/common/entities/kyc-services.entity';
-import KycCustomerEntity from 'src/common/entities/kyc-customer.entity';
-import KycCustomerApplicationEntity from 'src/common/entities/kyc-customer-application.entity';
-import RequestData from 'src/common/interfaces/request-data.interface';
-import { AddCustomerContractServiceReq } from '../interfaces/add-customer-contract-services.interface';
-import JwtData from 'src/common/interfaces/jwt-data.interface';
+import KycCustomerServiceEntity from 'src/common/entities/kyc-customer-service';
+import KycChannelEntity from 'src/common/entities/kyc-channel';
+import KycOfficeEntity from 'src/common/entities/kyc-office';
+import KycExecutiveEntity from 'src/common/entities/kyc-executive';
+import KycServicesEntity from 'src/common/entities/kyc-services';
+import KycCustomerEntity from 'src/common/entities/kyc-customer';
+import KycCustomerApplicationEntity from 'src/common/entities/kyc-customer-application';
+import RequestData from 'src/common/interfaces/request-data';
+import { AddCustomerContractServiceReq } from '../interfaces/add-customer-contract-services';
+import JwtData from 'src/common/interfaces/jwt-data';
 import { KycRestException } from 'src/common/exception/kyc-rest-exception.exception';
-import { AdjustCustomerContractServiceReq } from '../interfaces/update-customer-contract-service.interfaces';
-import { StatusCustomerContractServiceReq } from '../interfaces/status-customer-contract-service.interfaces';
-import KycCampaignEntity from 'src/common/entities/kyc-campaign';
+import { AdjustCustomerContractServiceReq } from '../interfaces/update-customer-contract-service';
+import { StatusCustomerContractServiceReq } from '../interfaces/status-customer-contract-service';
 import KycOfferEntity from 'src/common/entities/kyc-offer';
 import { KycOfferStatus } from 'src/common/enums/kyc-offer-status';
 

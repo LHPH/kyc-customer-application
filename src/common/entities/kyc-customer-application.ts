@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn,CreateDateColumn, OneToMany} from 'typeorm'
-import KycChannelEntity from './kyc-channel.entity';
-import KycOfficeEntity from './kyc-office.entity';
-import KycExecutiveEntity from './kyc-executive.entity';
-import KycCustomerEntity from './kyc-customer.entity';
-import KycCustomerServiceEntity from './kyc-customer-service.entity';
+import KycChannelEntity from './kyc-channel';
+import KycOfficeEntity from './kyc-office';
+import KycExecutiveEntity from './kyc-executive';
+import KycCustomerEntity from './kyc-customer';
+import KycCustomerServiceEntity from './kyc-customer-service';
 import Promotions from '../interfaces/promotions';
 import KycOfferEntity from './kyc-offer';
 

@@ -1,4 +1,4 @@
-import JwtData from "./jwt-data.interface";
+import JwtData from "./jwt-data";
 
 export default interface RequestData<T>{
 

@@ -1,4 +1,4 @@
-import { ExceptionOptions } from "./exception-options.interface";
+import { ExceptionOptions } from "./exception-options";
 
 export class KycRestException extends Error{
 

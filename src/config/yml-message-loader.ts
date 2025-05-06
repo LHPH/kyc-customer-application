@@ -1,7 +1,7 @@
 import { readFileSync} from 'fs';
 import * as yaml from 'js-yaml';
 import { join } from 'path';
-import { KycMessages } from 'src/common/interfaces/kyc-messages.interfaces';
+import { KycMessages } from 'src/common/interfaces/kyc-messages';
 
 const YAML_MESSAGE_CONFIG_FILENAME = 'messages.yaml';
 

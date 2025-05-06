@@ -7,7 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
-import messages from './config/messages';
+import messages from './config/yml-message-loader';
 
 @Module({
   imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,

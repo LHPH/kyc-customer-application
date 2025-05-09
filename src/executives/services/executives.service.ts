@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import  ResponseData from "src/common/interfaces/response-data";
 import RequestData from "src/common/interfaces/request-data";
 import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "../interfaces/add-customer-contract-services";
@@ -14,6 +14,8 @@ import ExecutiveDocumentService from "./executive-document.service";
 @Injectable()
 export class ExecutiveService{
 
+    private readonly logger = new Logger(ExecutiveService.name);
+
     constructor(private executiveDatabaseSerivce: ExecutiveDatabaseService,
                 private executiveDocumentService: ExecutiveDocumentService,
                 private kycMessagesService: KycMessagesService){}
@@ -21,6 +23,7 @@ export class ExecutiveService{
 
     async contractServiceForCustomer(requestData: RequestData<AddCustomerContractServiceReq>): Promise<ResponseData<AddCustomerContractServiceResp>>{
 
+        this.logger.log('Saving contracted services');
         return this.executiveDatabaseSerivce.registerServices(requestData)
             .then(folio => {
                 return {
@@ -33,6 +36,7 @@ export class ExecutiveService{
 
     async adjustContractServiceForCustomer(requestData: RequestData<AdjustCustomerContractServiceReq>):  Promise<ResponseData<boolean>>{
 
+        this.logger.log('Adjust cost for contracted service');
         return this.executiveDatabaseSerivce.updateCostCustomerService(requestData)
             .then(result => {
                 return {
@@ -43,6 +47,7 @@ export class ExecutiveService{
 
     async statusContractServiceForCustomer(requestData: RequestData<StatusCustomerContractServiceReq>): Promise<ResponseData<boolean>>{
 
+        this.logger.log('Enabling/Disabling customer service');
         return this.executiveDatabaseSerivce.updateStatusCustomerService(requestData)
             .then(result => {
                 return {

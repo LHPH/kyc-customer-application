@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -25,6 +25,8 @@ import { KycOfferStatus } from 'src/common/enums/kyc-offer-status';
 
 @Injectable()
 export default class ExecutiveDatabaseService {
+
+    private readonly logger = new Logger(ExecutiveDatabaseService.name);
 
     constructor(
         @InjectRepository(KycCustomerApplicationEntity)
@@ -54,6 +56,7 @@ export default class ExecutiveDatabaseService {
         const idOffice = req.idOffice;
 
         let servicesEntities = [];
+        this.logger.log('Starting process to register contract services');
 
         for (const service of req.contractedServices) {
             let serviceEntity: KycServicesEntity = await this.getKycService(
@@ -87,6 +90,7 @@ export default class ExecutiveDatabaseService {
 
         const promotionalCode = req.promotionalCode ?? null;
 
+        this.logger.log('Mapping data to save in database');
         let application: KycCustomerApplicationEntity = {
         promotionalCode,
         channel: channelEntity,
@@ -114,23 +118,28 @@ export default class ExecutiveDatabaseService {
             application.services.push(contractedService);
         });
 
-        console.log(application);
-        console.log(application.services);
-
+        this.logger.log(`Saving services for customer ${application.customer.id}`);
         return this.kycCustomerApplicationRepository.save(application)
-            .then(result => result.id! );
+            .then(result => {
+
+                const folio = result.id!
+                this.logger.log(`The folio for customer ${application.customer.id} was ${folio}`);
+                return folio;
+            } );
     }
 
     async updateCostCustomerService(requestData: RequestData<AdjustCustomerContractServiceReq>): Promise<boolean>{
         
+        this.logger.log('Starting process to update cost of the service');
         const req: AdjustCustomerContractServiceReq = requestData.data!;
         const seqService: number =  requestData.params?.id
 
+        this.logger.log(`Checking if the customer ${req.customerId} has the service with id ${seqService}`);
         let customerService: KycCustomerServiceEntity = await this.getKycCustomerServiceByIdCustomerAndSeqService(req.customerId,seqService,true);
 
         customerService.serviceCost = req.cost;
 
-        console.log(customerService);
+        this.logger.log(`Updating the service with id ${seqService} for customer ${req.customerId}`);
 
         return this.kycCustomerServiceRepository.update({id: customerService.id}, {serviceCost: req.cost})
             .then(result => !! result.affected );
@@ -138,14 +147,16 @@ export default class ExecutiveDatabaseService {
 
     async updateStatusCustomerService(requestData: RequestData<StatusCustomerContractServiceReq>){
 
+        this.logger.log('Starting process to enable/disable the service');
         const req: StatusCustomerContractServiceReq = requestData.data!;
         const seqService: number = requestData.params?.id;
 
+        this.logger.log(`Checking if the customer ${req.customerId} has the service with id ${seqService}`);
         let customerService: KycCustomerServiceEntity = await this.getKycCustomerServiceByIdCustomerAndSeqService(req.customerId,seqService,!req.active);
 
         customerService.active = req.active;
 
-        console.log(customerService);
+        this.logger.log(`Updating the service with id ${seqService} status for customer ${req.customerId}`);
 
         return this.kycCustomerServiceRepository.update({id: customerService.id}, {active: req.active})
             .then(result => !! result.affected );

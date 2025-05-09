@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Body, Req } from "@nestjs/common";
+import { Controller, Post, Param, Body, Req, Logger } from "@nestjs/common";
 import { Request } from 'express';
 import { ExecutiveService } from "../services/executives.service";
 import { AddCustomerContractServiceReq, AddCustomerContractServiceResp } from "src/executives/interfaces/add-customer-contract-services";
@@ -10,6 +10,8 @@ import { KycUserRole } from "src/common/enums/kyc-user-role";
 
 @Controller()
 export class ExecutiveController{
+
+    private readonly logger = new Logger(ExecutiveController.name);
 
     constructor(private executiveService: ExecutiveService){}
 
@@ -28,6 +30,7 @@ export class ExecutiveController{
                 data: bodyReq
             }
 
+            this.logger.log('Received request to register contract services for customer');
             return this.executiveService.contractServiceForCustomer(requestData);
     }
 
@@ -56,6 +59,7 @@ export class ExecutiveController{
                 data: bodyReq
             }
 
+            this.logger.log('Received request to adjust contract service');
             return this.executiveService.adjustContractServiceForCustomer(requestData);
     }
 
@@ -78,6 +82,7 @@ export class ExecutiveController{
                 data: bodyReq
             }
 
+            this.logger.log('Received request to enable/disable contract service');
             return this.executiveService.statusContractServiceForCustomer(requestData);
     }
 }

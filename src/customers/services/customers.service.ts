@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { KycService } from 'src/common/interfaces/kyc-service';
 import  ResponseData from 'src/common/interfaces/response-data';
 import  RequestData from 'src/common/interfaces/request-data';
 import  KycCustomerApplicationEntity  from 'src/common/entities/kyc-customer-application';
-import { KycMessagesService } from 'src/common/services/kyc-message.service';
+import { KycMessagesService } from 'src/common/services/kyc-message.service'; 
 
 @Injectable()
 export class CustomerService{
+
+    private readonly logger = new Logger(CustomerService.name);
 
     constructor(@InjectRepository(KycCustomerApplicationEntity)
                private kycCustomerApplicationRepository: Repository<KycCustomerApplicationEntity>,
@@ -17,6 +19,7 @@ export class CustomerService{
 
     getCustomerContractedServices(requestData: RequestData<null> ): Promise<ResponseData<KycService[]>> {
 
+        this.logger.log('Retrieve customer contracted services');
         return this.kycCustomerApplicationRepository.find(
         {
             relations:{
@@ -35,10 +38,12 @@ export class CustomerService{
 
             const arr: KycService[] = [];
 
+            this.logger.log(`It was retrieved ${results?.length} services`);
             results.map(application => {
 
                 let serviceView: KycService;
 
+                this.logger.log(`Mapping services of folio ${application.id}`);
                 application.services.map(recordService => {
 
                     serviceView = {
@@ -61,6 +66,7 @@ export class CustomerService{
                         modificationDate: recordService.modificationDate
                     }
                     arr[arr.length] = serviceView;
+                    this.logger.debug(`The service is ${JSON.stringify(serviceView)}`);
                 });
             })
             return arr;

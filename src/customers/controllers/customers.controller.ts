@@ -1,4 +1,4 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Req, Logger } from '@nestjs/common';
 import { Request } from 'express';
 import ResponseData from 'src/common/interfaces/response-data';
 import { KycService } from 'src/common/interfaces/kyc-service';
@@ -8,6 +8,8 @@ import { KycUserRole } from 'src/common/enums/kyc-user-role';
 
 @Controller()
 export class CustomerController {
+
+    private readonly logger = new Logger(CustomerController.name);
 
     constructor(private readonly customerService: CustomerService){}
 
@@ -22,7 +24,8 @@ export class CustomerController {
                             channel: 1
                         }
                     }
-        
+
+        this.logger.log('Received request to get the customer contracted services');
         return this.customerService.getCustomerContractedServices(requestData);
     }
 }

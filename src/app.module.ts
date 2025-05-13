@@ -7,11 +7,13 @@ import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule, Params } from 'nestjs-pino';
+import { TerminusModule } from '@nestjs/terminus';
 import configuration from './config/configuration';
 import messages from './config/yml-message-loader';
+import { HealthController } from './health.controller';
 
 @Module({
-  imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,
+  imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,TerminusModule,
     ConfigModule.forRoot({ 
       isGlobal: true,
       load: [configuration,messages]
@@ -78,7 +80,7 @@ import messages from './config/yml-message-loader';
       }
     })  
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [AppService],
 })
 export class AppModule {}

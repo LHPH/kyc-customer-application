@@ -9,7 +9,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule, Params } from 'nestjs-pino';
 import configuration from './config/configuration';
 import messages from './config/yml-message-loader';
-import { pino } from 'pino';
 
 @Module({
   imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,
@@ -23,55 +22,56 @@ import { pino } from 'pino';
       useFactory: async(configService: ConfigService) => {
 
         const targets = [];
-        targets.push({
-          target: 'pino-pretty',
+        targets.push(
+          {
+            target: 'pino-pretty',
+            level: configService.get<string>('LOG_LEVEL') || 'info',
             options: {
               colorize: true,
               singleLine: true,
               timestampKey: 'time',
+              ignore: 'pid,hostname',
               translateTime: 'yyyy-MM-dd HH:mm:ss'
-            }  
-        });
+            }
+          }
+        );
 
         const env = configService.get<string>('NODE_ENV') || 'development';
         if(env === 'production'){
 
-          targets.push({
+          targets.push(
+            {
               target: 'pino/file',
+              level: configService.get<string>('LOG_LEVEL') || 'info',
               options:{
-                destination: configService.get<string>('LOG_PATH'),
+                destination: `${configService.get<string>('LOG_BASE_PATH')}/${configService.get<string>('APP_NAME')}.log`,
                 mkdir: true
               }
-          });
+            },
+            {
+              target: 'pino-roll',
+              level: configService.get<string>('LOG_LEVEL') || 'info',
+              options:{
+                file: `${configService.get<string>('LOG_BASE_PATH')}/${configService.get<string>('APP_NAME')}/app`,
+                size: '50m',
+                frequency: 'daily',
+                extension: '.log',
+                mkdir: true,
+                dateFormat: 'yyyy-MM-dd',
+                limit: {
+                  count: 30
+                }
+              }
+            }
+        );
         } 
         
         return {
           pinoHttp: {
             level: configService.get<string>('LOG_LEVEL') || 'info',
             autoLogging: true,
-            transport: {
-              
-              targets: [
-                {
-                  target: 'pino-pretty',
-                  level: configService.get<string>('LOG_LEVEL') || 'info',
-                  options: {
-                    colorize: true,
-                    singleLine: true,
-                    timestampKey: 'time',
-                    ignore: 'pid,hostname',
-                    translateTime: 'yyyy-MM-dd HH:mm:ss'
-                  }
-                },
-                {
-                  target: 'pino/file',
-                  level: configService.get<string>('LOG_LEVEL') || 'info',
-                  options:{
-                    destination: configService.get<string>('LOG_PATH'),
-                    mkdir: true
-                  }
-                }
-              ]
+            transport: { 
+              targets: targets
             }
           }
         }

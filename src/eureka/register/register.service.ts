@@ -1,0 +1,21 @@
+//Based in https://gitlab.com/fboisselier52/nestjs-eureka with minor changes 
+// and replace eureka-js-client with fork @rocketsoftware/eureka-js-client'
+
+import { Injectable, OnApplicationBootstrap, Logger, OnApplicationShutdown, Optional } from '@nestjs/common';
+import { Eureka } from '@rocketsoftware/eureka-js-client';
+@Injectable()
+export class RegisterService implements OnApplicationBootstrap, OnApplicationShutdown {
+  protected logger: Logger = new Logger(RegisterService.name);
+  constructor(protected client: Eureka) {}
+  async onApplicationBootstrap() {
+    if (this.client) {
+      // Auto start client
+      await new Promise(cb => this.client.start(cb));
+    }
+  }
+  async onApplicationShutdown() {
+    if (this.client) {
+      await new Promise(cb => this.client.stop(cb));
+    }
+  }
+}

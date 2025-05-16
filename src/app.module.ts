@@ -11,6 +11,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import configuration from './config/configuration';
 import messages from './config/yml-message-loader';
 import { HealthController } from './health.controller';
+import { EurekaModule } from './eureka/eureka.module';
 
 @Module({
   imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,TerminusModule,
@@ -77,6 +78,19 @@ import { HealthController } from './health.controller';
             }
           }
         }
+      }
+    }),
+    EurekaModule.forRoot({
+      eureka:{
+        host: 'localhost',
+        port: 9100,
+        registryFetchInterval: 1000,
+        servicePath: '/eureka/apps',
+        maxRetries: 3
+      },
+      service:{
+        name: 'kyc-customer-application',
+        port: 9010
       }
     })  
   ],

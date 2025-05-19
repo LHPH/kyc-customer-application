@@ -34,7 +34,7 @@ import { EurekaModule } from './eureka/eureka.module';
               singleLine: true,
               timestampKey: 'time',
               ignore: 'pid,hostname',
-              translateTime: 'yyyy-MM-dd HH:mm:ss'
+              translateTime: 'yyyy-mm-dd HH:MM:ss'
             }
           }
         );
@@ -60,7 +60,7 @@ import { EurekaModule } from './eureka/eureka.module';
                 frequency: 'daily',
                 extension: '.log',
                 mkdir: true,
-                dateFormat: 'yyyy-MM-dd',
+                dateFormat: 'yyyy-mm-dd',
                 limit: {
                   count: 30
                 }
@@ -80,17 +80,25 @@ import { EurekaModule } from './eureka/eureka.module';
         }
       }
     }),
-    EurekaModule.forRoot({
-      eureka:{
-        host: 'localhost',
-        port: 9100,
-        registryFetchInterval: 1000,
-        servicePath: '/eureka/apps',
-        maxRetries: 3
-      },
-      service:{
-        name: 'kyc-customer-application',
-        port: 9010
+    EurekaModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async(configService: ConfigService) => {
+
+        return {
+          eureka:{
+            host: configService.get<string>('EUREKA_HOST'),
+            port: configService.get<number>('EUREKA_PORT'),
+            registryFetchInterval: 30000,
+            servicePath: '/eureka/apps',
+            maxRetries: 3
+          },
+          service:{
+            name: 'kyc-customer-application',
+            port: configService.get<number>('PORT') ?? 9010
+          },
+          disable: false
+        }
       }
     })  
   ],

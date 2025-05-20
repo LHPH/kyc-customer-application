@@ -7,6 +7,7 @@ import { StatusCustomerContractServiceReq } from "src/executives/interfaces/stat
 import ResponseData  from "src/common/interfaces/response-data";
 import RequestData from "src/common/interfaces/request-data";
 import { KycUserRole } from "src/common/enums/kyc-user-role";
+import { GetDocumentRequest, GetDocumentResponse } from "../interfaces/get-documents";
 
 @Controller()
 export class ExecutiveController{
@@ -34,10 +35,23 @@ export class ExecutiveController{
             return this.executiveService.contractServiceForCustomer(requestData);
     }
 
-    @Post('/service-contract/document')
-    generateDocuments(@Req() req: Request){
+    @Post('/service-contract/documents')
+    generateDocuments(
+        @Req() req: Request,
+        @Body() bodyReq: GetDocumentRequest): Promise<ResponseData<GetDocumentResponse>>{
 
-        return true;
+            const requestData: RequestData<GetDocumentRequest> = {
+                auth: {
+                    owner: 1,
+                    user: 1,
+                    role: KycUserRole.EXECUTIVE,
+                    channel: 1
+                },
+                data: bodyReq
+            }
+
+
+        return this.executiveService.generateDocumentsForCustomer(requestData);
     }
 
     @Post('/service-contract/{:id}/adjustment')

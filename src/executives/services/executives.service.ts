@@ -10,6 +10,7 @@ import  Message  from "src/common/interfaces/message";
 import { MessageCodes } from "src/common/enums/message-codes";
 import ExecutiveDatabaseService from "./executive-database.service";
 import ExecutiveDocumentService from "./executive-document.service";
+import { GetDocumentRequest, GetDocumentResponse } from "../interfaces/get-documents";
 
 @Injectable()
 export class ExecutiveService{
@@ -54,5 +55,15 @@ export class ExecutiveService{
                     data: result
                 }
             })
+    }
+
+    async generateDocumentsForCustomer(requestData: RequestData<GetDocumentRequest>): Promise<ResponseData<GetDocumentResponse>>{
+
+        return this.executiveDocumentService.generateDocumentForContractingServices(requestData)
+        .then(result => {
+            return {
+                data: result
+            }
+        })
     }
 }

@@ -1,6 +1,12 @@
+import {IsNumber, IsPositive} from 'class-validator'
 
-export interface AdjustCustomerContractServiceReq{
+export class AdjustCustomerContractServiceReq{
 
-    customerId: number,
+    @IsNumber()
+    @IsPositive()
+    customerId: number
+
+    @IsPositive()
+    @IsNumber()
     cost: number
 }

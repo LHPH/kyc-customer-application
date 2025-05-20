@@ -1,17 +1,36 @@
+import {IsAlphanumeric, IsArray, IsNumber, IsObject, IsOptional, IsPositive} from 'class-validator'
 import Promotions from "src/common/interfaces/promotions";
 
-export interface AddCustomerContractServiceReq{
+export class AddCustomerContractServiceReq{
 
-    customerId: number,
-    promotionalCode?: string,
-    contractedServices: CustomerContractService[],
-    idOffice: number,
-    idOffer?: number,
+    @IsNumber()
+    @IsPositive()
+    customerId: number
+
+    @IsOptional()
+    @IsAlphanumeric()
+    promotionalCode?: string
+
+    @IsArray()
+    contractedServices: CustomerContractService[]
+
+    @IsNumber()
+    @IsPositive()
+    idOffice: number
+
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    idOffer?: number
+
+    @IsObject()
     promotions: Promotions
 }
 
-export interface CustomerContractService{
+export class CustomerContractService{
 
+    @IsPositive()
+    @IsNumber()
     id: number
 }
 

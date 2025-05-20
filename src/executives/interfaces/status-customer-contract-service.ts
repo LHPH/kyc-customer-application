@@ -1,6 +1,11 @@
+import {IsNumber, IsBoolean,IsPositive} from 'class-validator'
 
-export interface StatusCustomerContractServiceReq{
+export class StatusCustomerContractServiceReq{
 
-    customerId: number,
+    @IsNumber()
+    @IsPositive()
+    customerId: number
+    
+    @IsBoolean()
     active: boolean
 }

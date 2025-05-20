@@ -1,4 +1,4 @@
-import {IsNumber} from 'class-validator'
+import {IsNumber, IsPositive} from 'class-validator'
 
 export interface GetDocumentResponse{
 
@@ -7,8 +7,12 @@ export interface GetDocumentResponse{
 }
 
 export class GetDocumentRequest{
+
     @IsNumber()
+    @IsPositive()
     customerId: number
+
+    @IsPositive()
     @IsNumber()
     folio: number
 }

@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, BadRequestException, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { TypeORMError } from "typeorm";
 import { KycMessagesService } from '../services/kyc-message.service';
@@ -36,6 +36,12 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
             status = restExc.params.status;
             level = notification.type ?? level;
         }
+        else if(exception instanceof BadRequestException){
+            const badReqExc: BadRequestException = exception;
+            status = HttpStatus.BAD_REQUEST;
+            notification = this.kycMessagesService.getMessage(MessageCodes.INVALID_REQUEST);
+            notification.message = `${notification.message}: ${this.getMessageBadReqExc(badReqExc)}`;
+        }
         else{
             notification = this.kycMessagesService.getMessage(MessageCodes.UNEXPECTED_ERROR);
         }
@@ -53,5 +59,21 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
         };
 
         response.status(status).json(responseJson);
+    }
+
+    private getMessageBadReqExc(exception: BadRequestException): string{
+
+        const response = exception.getResponse();
+
+        if(typeof response === 'string'){
+            return response;
+        }
+        else if(Array.isArray(response)){
+            return response.join();
+        }
+        else if(typeof response === 'object' && 'message' in response){
+            return `${response.message ?? ''}`;
+        }
+        return '';
     }
 }

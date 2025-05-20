@@ -1,11 +1,15 @@
+import {IsNumber} from 'class-validator'
+
 export interface GetDocumentResponse{
 
     documents: DocumentData[]
 
 }
 
-export interface GetDocumentRequest{
-    customerId: number,
+export class GetDocumentRequest{
+    @IsNumber()
+    customerId: number
+    @IsNumber()
     folio: number
 }
 

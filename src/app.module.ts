@@ -12,9 +12,10 @@ import configuration from './config/configuration';
 import messages from './config/yml-message-loader';
 import { HealthController } from './health.controller';
 import { EurekaModule } from './eureka/eureka.module';
+import { ApiModule } from './api/api.module';
 
 @Module({
-  imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,TerminusModule,
+  imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,TerminusModule, ApiModule,
     ConfigModule.forRoot({ 
       isGlobal: true,
       load: [configuration,messages]

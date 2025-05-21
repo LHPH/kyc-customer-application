@@ -3,5 +3,6 @@ import Message  from "../interfaces/message";
 export interface ExceptionOptions{
 
     message?: Message,
-    status: number
+    status: number,
+    error?: any
 }

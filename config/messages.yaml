@@ -29,3 +29,9 @@ kyc-messages:
       "007":
         code: KYC-CUSTOMER-SERVICE-007
         message: The folio for the customer was not found
+      "008":
+        code: KYC-CUSTOMER-SERVICE-008
+        message: The application form document cannot be generated
+      "009":
+        code: KYC-CUSTOMER-SERVICE-009
+        message: The contract document cannot be generated

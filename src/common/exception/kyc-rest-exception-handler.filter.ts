@@ -6,6 +6,7 @@ import { MessageCodes } from '../enums/message-codes';
 import Message  from '../interfaces/message';
 import ResponseData  from '../interfaces/response-data';
 import { KycRestException } from './kyc-rest-exception.exception';
+import { AxiosError } from 'axios';
 
 @Catch()
 export class KycRestExceptionHandler<T extends HttpException | KycRestException | TypeORMError> implements ExceptionFilter{
@@ -50,7 +51,7 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
             this.logger.warn(`\nCode: ${notification.code}\nMessage: ${notification.message}\nHttp Status: ${status}\n`);
         }
         else {
-            this.logger.error(`\nCode: ${notification.code}\nMessage: ${notification.message}\nHttp Status: ${status}\nException: ${exception.stack}\n`);
+            this.logger.error(`\nCode: ${notification.code}\nMessage: ${notification.message}\nHttp Status: ${status}\nException: ${exception.stack}\nCause: ${this.processCause(exception.cause)}\n`);
         }
 
         const responseJson: ResponseData<any> = {
@@ -73,6 +74,15 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
         }
         else if(typeof response === 'object' && 'message' in response){
             return `${response.message ?? ''}`;
+        }
+        return '';
+    }
+
+    private processCause(error: any){
+
+        if(error instanceof AxiosError){
+
+            return `${error.code}, ${error.message}, ${error.response?.data}, ${error.response?.data?.message}`;
         }
         return '';
     }

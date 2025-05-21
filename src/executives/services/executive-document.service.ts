@@ -30,6 +30,7 @@ export default class ExecutiveDocumentService{
 
         const data: GetDocumentRequest = requestData.data!;
         const auth = requestData.auth;
+        const headers = requestData.headers;
 
         const folios: KycCustomerApplicationEntity[] = await this.kycCustomerApplicationRepository.find(
             {
@@ -76,7 +77,7 @@ export default class ExecutiveDocumentService{
             
             const applicationFormRequest: ApplicationFormRequest = {
                 folio: result.id!,
-                dateApplication: result.creationDate?.toISOString()!,
+                dateApplication: result.creationDate?.toISOString().split("T")[0]!,
                 total,
                 campaign: result.offer?.campaign?.id,
                 customerNumber: result.customer.id,
@@ -102,8 +103,8 @@ export default class ExecutiveDocumentService{
                 customerAddress,
                 contractedServices: services
             }
-            const promiseApplicationForm: Promise<ResponseData<ReportResponse>> = this.kycReportService.createApplicationFormDocument({data: applicationFormRequest, auth});
-            const promiseContract: Promise<ResponseData<ReportResponse>> = this.kycReportService.createContractDocument({data: contractRequest, auth});
+            const promiseApplicationForm: Promise<ResponseData<ReportResponse>> = this.kycReportService.createApplicationFormDocument({data: applicationFormRequest, auth, headers});
+            const promiseContract: Promise<ResponseData<ReportResponse>> = this.kycReportService.createContractDocument({data: contractRequest, auth, headers});
             
             const promisesResponse = await Promise.all([promiseApplicationForm,promiseContract]);
             const documents: DocumentData[] = promisesResponse.map(response => {

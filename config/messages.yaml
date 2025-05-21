@@ -26,3 +26,6 @@ kyc-messages:
       "006":
         code: KYC-CUSTOMER-SERVICE-006
         message: The service is not acquired or is inactive for the customer
+      "007":
+        code: KYC-CUSTOMER-SERVICE-007
+        message: The folio for the customer was not found

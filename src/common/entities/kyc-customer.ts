@@ -22,6 +22,12 @@ export default class KycCustomerEntity{
     @Column()
     rfc: string;
 
+    @Column({name: 'cell_phone'})
+    cellPhone: string
+
+    @Column()
+    email: string
+
     @Column()
     active: boolean;
 

@@ -21,7 +21,7 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
         const request = ctx.getRequest<Request>();
 
         let notification: Message;
-        let status: HttpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+        let status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         let level: string = 'ERROR';
 
         if(exception instanceof TypeORMError){

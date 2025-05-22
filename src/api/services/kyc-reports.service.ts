@@ -19,6 +19,8 @@ export class KycReportService{
 
     private readonly logger = new Logger(KycReportService.name);
 
+    private readonly SERVICE_NAME = 'KYC-REPORTS';
+
     constructor(
         discoveryService: DiscoveryService,
         private httpService: HttpService,
@@ -27,54 +29,50 @@ export class KycReportService{
 
     async createApplicationFormDocument(request: RequestData<ApplicationFormRequest>): Promise<ResponseData<ReportResponse>>{
 
-        this.logger.log('Create Document '+JSON.stringify(request.data));
+        this.logger.debug('Create Document '+JSON.stringify(request.data));
 
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${request.headers?.Authorization}`
         }
 
-       const { data } = await firstValueFrom(
-            this.httpService.post<ResponseData<ReportResponse>>(`http://localhost:9005/reports/application-form`,request.data,{headers})
+        const hostname = 'http://localhost:9005';
+
+        this.logger.log('Call service to generate the application form');
+        const { data } = await firstValueFrom(
+            this.httpService.post<ResponseData<ReportResponse>>(`${hostname}/reports/application-form`,request.data,{headers})
             .pipe(catchError((error: AxiosError) => {
 
                 const notification: Message = this.kycMessagesService.getMessage(MessageCodes.APPLICATION_FORM_NOT_GENERATED);
                 throw new KycRestException({message: notification, status: HttpStatus.BAD_GATEWAY, error})
             }))
-       );
+        );
 
        return data;
     }
 
     async createContractDocument(request: RequestData<ContractRequest>): Promise<ResponseData<ReportResponse>>{
 
-        this.logger.log('Create contract '+JSON.stringify(request.data));
+        this.logger.debug('Create contract '+JSON.stringify(request.data));
 
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${request.headers?.Authorization}`
         }
 
-       /*const { data } = await firstValueFrom(
-            this.httpService.post<ResponseData<ReportResponse>>(`http://localhost:9005/reports/contract`,request.data,{headers})
+        const hostname = 'http://localhost:9005';
+
+        this.logger.log('Call service to generate the contract');
+        const { data } = await firstValueFrom(
+            this.httpService.post<ResponseData<ReportResponse>>(`${hostname}/reports/contract`,request.data,{headers})
             .pipe(catchError((error: AxiosError) => {
 
                 const notification: Message = this.kycMessagesService.getMessage(MessageCodes.CONTRACT_DOCUMENT_NOT_GENERATED);
-                this.logger.error(error.response);
                 throw new KycRestException({message: notification, status: HttpStatus.BAD_GATEWAY, error: error.response?.data})
             }))
-       );
+        );
 
-       return data;*/
-       return Promise.resolve({
-        data: {
-            id: '1',
-            name: 'name',
-            mimeType: '',
-            size: 1,
-            date: ''
-        }
-       })
+        return data;
     }
 
 }

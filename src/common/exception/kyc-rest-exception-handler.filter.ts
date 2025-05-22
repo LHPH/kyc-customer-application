@@ -6,7 +6,7 @@ import { MessageCodes } from '../enums/message-codes';
 import Message  from '../interfaces/message';
 import ResponseData  from '../interfaces/response-data';
 import { KycRestException } from './kyc-rest-exception.exception';
-import { AxiosError } from 'axios';
+import { ExceptionUtil } from '../util/exception.util';
 
 @Catch()
 export class KycRestExceptionHandler<T extends HttpException | KycRestException | TypeORMError> implements ExceptionFilter{
@@ -41,17 +41,18 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
             const badReqExc: BadRequestException = exception;
             status = HttpStatus.BAD_REQUEST;
             notification = this.kycMessagesService.getMessage(MessageCodes.INVALID_REQUEST);
-            notification.message = `${notification.message}: ${this.getMessageBadReqExc(badReqExc)}`;
+            notification.message = `${notification.message}: ${ExceptionUtil.getMessageBadReqExc(badReqExc)}`;
         }
         else{
             notification = this.kycMessagesService.getMessage(MessageCodes.UNEXPECTED_ERROR);
         }
 
+        const errorMessageToLogger = ExceptionUtil.getStringMessage(notification,status,exception);
         if(level === 'WARN'){
-            this.logger.warn(`\nCode: ${notification.code}\nMessage: ${notification.message}\nHttp Status: ${status}\n`);
+            this.logger.warn(errorMessageToLogger);
         }
         else {
-            this.logger.error(`\nCode: ${notification.code}\nMessage: ${notification.message}\nHttp Status: ${status}\nException: ${exception.stack}\nCause: ${this.processCause(exception.cause)}\n`);
+            this.logger.error(errorMessageToLogger);
         }
 
         const responseJson: ResponseData<any> = {
@@ -60,30 +61,5 @@ export class KycRestExceptionHandler<T extends HttpException | KycRestException 
         };
 
         response.status(status).json(responseJson);
-    }
-
-    private getMessageBadReqExc(exception: BadRequestException): string{
-
-        const response = exception.getResponse();
-
-        if(typeof response === 'string'){
-            return response;
-        }
-        else if(Array.isArray(response)){
-            return response.join();
-        }
-        else if(typeof response === 'object' && 'message' in response){
-            return `${response.message ?? ''}`;
-        }
-        return '';
-    }
-
-    private processCause(error: any){
-
-        if(error instanceof AxiosError){
-
-            return `${error.code}, ${error.message}, ${error.response?.data}, ${error.response?.data?.message}`;
-        }
-        return '';
     }
 }

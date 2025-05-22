@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import RequestData from "src/common/interfaces/request-data";
 import { DiscoveryService } from "src/eureka/discovery/discovery.service";
-import { ApplicationFormRequest } from "../document/interfaces/application-form";
-import { ContractRequest } from "../document/interfaces/contract";
-import { ReportResponse } from "../document/interfaces/kyc-reports-response";
+import { ApplicationFormRequest } from "../interfaces/document/application-form";
+import { ContractRequest } from "../interfaces/document/contract";
+import { ReportResponse } from "../interfaces/document/kyc-reports-response";
 import ResponseData from "src/common/interfaces/response-data";
 import { KycMessagesService } from "src/common/services/kyc-message.service";
 import { HttpService } from "@nestjs/axios";

@@ -8,14 +8,14 @@ import { KycReportService } from "src/api/services/kyc-reports.service";
 import KycCustomerApplicationEntity from "src/common/entities/kyc-customer-application";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ApplicationFormRequest } from "src/api/document/interfaces/application-form";
-import { Service } from "src/api/document/interfaces/service";
+import { ApplicationFormRequest } from "src/api/interfaces/document/application-form";
+import { Service } from "src/api/interfaces/document/service";
 import KycCustomerServiceEntity from "src/common/entities/kyc-customer-service";
-import { ContractRequest } from "src/api/document/interfaces/contract";
+import { ContractRequest } from "src/api/interfaces/document/contract";
 import { MessageCodes } from "src/common/enums/message-codes";
 import { KycRestException } from "src/common/exception/kyc-rest-exception.exception";
 import ResponseData from "src/common/interfaces/response-data";
-import { ReportResponse } from "src/api/document/interfaces/kyc-reports-response";
+import { ReportResponse } from "src/api/interfaces/document/kyc-reports-response";
 
 @Injectable()
 export default class ExecutiveDocumentService{

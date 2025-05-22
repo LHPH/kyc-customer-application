@@ -22,7 +22,7 @@ export class ExceptionUtil{
 
                 if(cause.response){
 
-                    strMessage = `${strMessage}Axios Response Data: ${cause.response.data}\n`;
+                    strMessage = `${strMessage}Axios Response Data: ${JSON.stringify(cause.response.data)}\n`;
                     strMessage = `${strMessage}Axios Response Status: ${cause.response.status}\n`;
                 }
             }

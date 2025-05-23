@@ -8,6 +8,8 @@ import ResponseData  from "src/common/interfaces/response-data";
 import RequestData from "src/common/interfaces/request-data";
 import { KycUserRole } from "src/common/enums/kyc-user-role";
 import { GetDocumentRequest, GetDocumentResponse } from "../interfaces/get-documents";
+import { PreAuthorize } from "src/common/auth/auth.decorator";
+import AuthRequest from "src/common/auth/auth-request";
 
 @Controller()
 export class ExecutiveController{
@@ -16,18 +18,15 @@ export class ExecutiveController{
 
     constructor(private executiveService: ExecutiveService){}
 
+    @PreAuthorize(KycUserRole.EXECUTIVE)
     @Post('/service-contract/fulfillment')
     contractServiceForCustomer(
-        @Req() req: Request,
+        @Req() req: AuthRequest,
         @Body() bodyReq: AddCustomerContractServiceReq): Promise<ResponseData<AddCustomerContractServiceResp>> {
 
             const requestData: RequestData<AddCustomerContractServiceReq> = {
-                auth: {
-                    owner: 1,
-                    user: 1,
-                    role: KycUserRole.EXECUTIVE,
-                    channel: 1
-                },
+                auth: req.auth,
+                headers: req.headers,
                 data: bodyReq
             }
 
@@ -35,18 +34,15 @@ export class ExecutiveController{
             return this.executiveService.contractServiceForCustomer(requestData);
     }
 
+    @PreAuthorize(KycUserRole.EXECUTIVE)
     @Post('/service-contract/documents')
     generateDocuments(
-        @Req() req: Request,
+        @Req() req: AuthRequest,
         @Body() bodyReq: GetDocumentRequest): Promise<ResponseData<GetDocumentResponse>>{
 
             const requestData: RequestData<GetDocumentRequest> = {
-                auth: {
-                    owner: 1,
-                    user: 1,
-                    role: KycUserRole.EXECUTIVE,
-                    channel: 1
-                },
+                auth: req.auth,
+                headers: req.headers,
                 data: bodyReq
             }
 
@@ -54,9 +50,10 @@ export class ExecutiveController{
         return this.executiveService.generateDocumentsForCustomer(requestData);
     }
 
+    @PreAuthorize(KycUserRole.EXECUTIVE)
     @Post('/service-contract/{:id}/adjustment')
     adjustContractServiceForCustomer(
-        @Req() req: Request,
+        @Req() req: AuthRequest,
         @Param('id') id: number,
         @Body() bodyReq: AdjustCustomerContractServiceReq): Promise<ResponseData<boolean>> {
 
@@ -64,12 +61,8 @@ export class ExecutiveController{
                 params: {
                     id
                 },
-                auth: {
-                    owner: 1,
-                    user: 1,
-                    role: KycUserRole.EXECUTIVE,
-                    channel: 1
-                },
+                headers: req.headers,
+                auth: req.auth,
                 data: bodyReq
             }
 
@@ -77,9 +70,10 @@ export class ExecutiveController{
             return this.executiveService.adjustContractServiceForCustomer(requestData);
     }
 
+    @PreAuthorize(KycUserRole.EXECUTIVE)
     @Post('/service-contract/{:id}/status')
     statusContractServiceForCustomer(
-        @Req() req: Request,
+        @Req() req: AuthRequest,
         @Param('id') id: number,
         @Body() bodyReq: StatusCustomerContractServiceReq): Promise<ResponseData<boolean>>{
 
@@ -87,12 +81,8 @@ export class ExecutiveController{
                 params: {
                     id
                 },
-                auth: {
-                    owner: 1,
-                    user: 1,
-                    role: KycUserRole.EXECUTIVE,
-                    channel: 1
-                },
+                headers: req.headers,
+                auth: req.auth,
                 data: bodyReq
             }
 

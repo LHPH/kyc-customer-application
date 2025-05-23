@@ -33,7 +33,7 @@ export class KycReportService{
 
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${request.headers?.Authorization}`
+            'Authorization': `Bearer ${request.headers?.authorization}`
         }
 
         const hostname = 'http://localhost:9005';
@@ -57,7 +57,7 @@ export class KycReportService{
 
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${request.headers?.Authorization}`
+            'Authorization': `Bearer ${request.headers?.authorization}`
         }
 
         const hostname = 'http://localhost:9005';

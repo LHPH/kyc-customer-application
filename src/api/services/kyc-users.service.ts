@@ -45,16 +45,7 @@ export class KycUserService implements SessionChecking{
                 throw new KycRestException({message: notification, status: HttpStatus.UNAUTHORIZED, error})
             }))
         );
-
         return data.data!
-
-        /*const jwtData: JwtData = {
-            owner: 5,
-            user: 1,
-            role: KycUserRole.CUSTOMER,
-            channel: 1
-        }
-        return Promise.resolve(jwtData);*/
     }
 
 }

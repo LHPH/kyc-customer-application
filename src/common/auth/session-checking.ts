@@ -1,6 +1,6 @@
 import JwtData from "../interfaces/jwt-data";
 
-export default interface SessionChecking{
+export default abstract class SessionChecking{
 
-    sessionChecking(token: string): JwtData
+    abstract sessionChecking(token: string): Promise<JwtData>
 }

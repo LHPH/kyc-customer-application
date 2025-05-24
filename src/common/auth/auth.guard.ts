@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, HttpStatus, Injectable, Logger } from "@nestjs/common";
-import { Observable } from "rxjs";
 import { KycMessagesService } from "../services/kyc-message.service";
 import Message from "../interfaces/message";
 import { KycRestException } from "../exception/kyc-rest-exception.exception";
@@ -8,6 +7,7 @@ import { Reflector } from "@nestjs/core";
 import { KycUserRole } from "../enums/kyc-user-role";
 import JwtData from "../interfaces/jwt-data";
 import AuthRequest from "./auth-request";
+import SessionChecking from "./session-checking";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,10 +16,11 @@ export class AuthGuard implements CanActivate {
 
     constructor(
         private reflector: Reflector,
+        private sessionService: SessionChecking,
         private kycMessagesService: KycMessagesService
     ){}
 
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         
         const request: AuthRequest = context.switchToHttp().getRequest();
         const headers = request.headers;
@@ -38,15 +39,15 @@ export class AuthGuard implements CanActivate {
             return true;
         }
 
-        const jwtData: JwtData = {
-            owner: 5,
-            user: 1,
-            role: KycUserRole.CUSTOMER,
-            channel: 1
+       const jwtData: JwtData = await this.sessionService.sessionChecking(token);
+
+        if(!roles.includes(jwtData.role)){
+
+            const notification: Message = this.kycMessagesService.getMessage(MessageCodes.UNAUTHORIZED);
+            throw new KycRestException({message: notification, status: HttpStatus.FORBIDDEN});
         }
 
         request.auth = jwtData;
-
         return true;
     }
 

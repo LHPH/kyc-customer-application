@@ -40,7 +40,7 @@ function getEurekaProvider(options: EurekaModuleOptions): Eureka {
       port: {
         // prettier-ignore
         '$': instancePort,
-        '@enabled': true,
+        '@enabled': 'true',
       },
       vipAddress: options.service?.name.toLowerCase()!,
       healthCheckUrl: `http://${host}:${instancePort}/health`,

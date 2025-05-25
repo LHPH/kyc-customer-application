@@ -84,7 +84,7 @@ declare module '@rocketsoftware/eureka-js-client'{
         }
         interface LegacyPortWrapper {
             $: number;
-            "@enabled": boolean;
+            "@enabled": string;
         }
         interface PortWrapper {
             enabled: boolean;

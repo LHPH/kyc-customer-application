@@ -17,7 +17,11 @@ export class DiscoveryService {
       if (instance) {
         this.logger.debug(`Found an instance of ${serviceName} in eureka`);
         const host = instance.hostName;
-        const port = this.getPort(instance);
+
+        let port = this.getSecurePort(instance);
+        if(!port){
+           port = this.getPort(instance);
+        }
         return { host, port };
       }
       this.logger.debug(`no instance of ${serviceName} found in eureka`);
@@ -27,19 +31,29 @@ export class DiscoveryService {
 
   private getPort(instance: EurekaClient.EurekaInstanceConfig): number {
 
-    if(instance.port === undefined){
-        return 0;
+    return this.resolvePort(instance.port);
+  }
+
+  private getSecurePort(instance: EurekaClient.EurekaInstanceConfig): number{
+
+    return this.resolvePort(instance.securePort);
+  }
+
+  private resolvePort(port: any) : number{
+
+    if(port === undefined){
+      return 0;
     }
 
-    if (typeof instance.port === 'number') {
-      return instance.port;
-    } else if (instance.port.hasOwnProperty('enabled') && (instance.port as EurekaClient.PortWrapper).enabled) {
-      return (instance.port as EurekaClient.PortWrapper).port;
+    if (typeof port === 'number') {
+      return port;
+    } else if (port.hasOwnProperty('enabled') && (port as EurekaClient.PortWrapper).enabled) {
+      return (port as EurekaClient.PortWrapper).port;
     } else if (
-      instance.port.hasOwnProperty('@enabled') &&
-      (instance.port as EurekaClient.LegacyPortWrapper)['@enabled']
+      port.hasOwnProperty('@enabled') &&
+      (port as EurekaClient.LegacyPortWrapper)['@enabled'] === 'true'
     ) {
-      return (instance.port as EurekaClient.LegacyPortWrapper).$;
+      return (port as EurekaClient.LegacyPortWrapper).$;
     }
     return 0;
   }

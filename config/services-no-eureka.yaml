@@ -1,0 +1,3 @@
+services:
+  kyc-reports: http://localhost:9005
+  kyc-users: http://localhost:9004

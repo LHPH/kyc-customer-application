@@ -1,0 +1,3 @@
+services:
+  kyc-reports: http://KYC-REPORTS
+  kyc-users: http://KYC-USERS

@@ -1,5 +1,5 @@
 import { HttpModule } from '@nestjs/axios';
-import { Module, Global } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { KycReportService } from './services/kyc-reports.service';
 import { CommonModule } from 'src/common/common.module';
 import { KycUserService } from './services/kyc-users.service';
@@ -8,7 +8,6 @@ import { MockKycUserService } from './mock/mock-kyc-users.service';
 import { ConfigModule } from '@nestjs/config';
 import { parseStringToBoolean } from 'src/common/util/functions.util';
 
-@Global()
 @Module({
     imports: [HttpModule,CommonModule,ConfigModule],
     providers: [KycReportService, {

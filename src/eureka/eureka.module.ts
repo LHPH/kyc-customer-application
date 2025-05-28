@@ -1,6 +1,6 @@
 //Based in https://gitlab.com/fboisselier52/nestjs-eureka with minor changes 
 // and replace eureka-js-client with fork @rocketsoftware/eureka-js-client'
-import { Module, DynamicModule, Provider, Type, Global } from '@nestjs/common';
+import { Module, DynamicModule, Provider, Type } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { eurekaClientProvider, EUREKA_MODULE_OPTIONS } from './client/client.provider';
 import { EurekaModuleOptions } from './interfaces/eureka.module.options';
@@ -13,7 +13,6 @@ import { DiscoveryService } from './discovery/discovery.service';
 const DEFAULT_OPTIONS: EurekaModuleOptions = { disable: true };
 const DEFAULT_ASYNC_OPTIONS: EurekaModuleAsyncOptions = { useFactory: () => DEFAULT_OPTIONS };
 
-@Global()
 @Module({
   imports: [HttpModule],
   providers: [eurekaClientProvider, ...discoveryProviders, registerProvider],

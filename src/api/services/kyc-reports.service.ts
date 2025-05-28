@@ -1,6 +1,5 @@
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import RequestData from "src/common/interfaces/request-data";
-import { DiscoveryService } from "src/eureka/discovery/discovery.service";
 import { ApplicationFormRequest } from "../interfaces/document/application-form";
 import { ContractRequest } from "../interfaces/document/contract";
 import { ReportResponse } from "../interfaces/document/kyc-reports-response";
@@ -12,6 +11,8 @@ import { AxiosError } from "axios";
 import Message from "src/common/interfaces/message";
 import { KycRestException } from "src/common/exception/kyc-rest-exception.exception";
 import { MessageCodes } from "src/common/enums/message-codes";
+import { ConfigService } from "@nestjs/config";
+import ServicesCatalog from "src/common/interfaces/services-catalog";
 
 
 @Injectable()
@@ -19,10 +20,10 @@ export class KycReportService{
 
     private readonly logger = new Logger(KycReportService.name);
 
-    private readonly SERVICE_NAME = 'KYC-REPORTS';
+    private readonly SERVICE_NAME = 'kyc-reports';
 
     constructor(
-        discoveryService: DiscoveryService,
+        private configService: ConfigService,
         private httpService: HttpService,
         private kycMessagesService: KycMessagesService
     ){}
@@ -36,11 +37,11 @@ export class KycReportService{
             'Authorization': `Bearer ${request.headers?.authorization}`
         }
 
-        const hostname = 'http://localhost:9005';
+       const serviceCatalog: ServicesCatalog = this.configService.get<ServicesCatalog>('services')!;
 
         this.logger.log('Call service to generate the application form');
         const { data } = await firstValueFrom(
-            this.httpService.post<ResponseData<ReportResponse>>(`${hostname}/reports/application-form`,request.data,{headers})
+            this.httpService.post<ResponseData<ReportResponse>>(`${serviceCatalog[this.SERVICE_NAME]}/reports/application-form`,request.data,{headers})
             .pipe(catchError((error: AxiosError) => {
 
                 const notification: Message = this.kycMessagesService.getMessage(MessageCodes.APPLICATION_FORM_NOT_GENERATED);
@@ -60,11 +61,11 @@ export class KycReportService{
             'Authorization': `Bearer ${request.headers?.authorization}`
         }
 
-        const hostname = 'http://localhost:9005';
+        const serviceCatalog: ServicesCatalog = this.configService.get<ServicesCatalog>('services')!;
 
         this.logger.log('Call service to generate the contract');
         const { data } = await firstValueFrom(
-            this.httpService.post<ResponseData<ReportResponse>>(`${hostname}/reports/contract`,request.data,{headers})
+            this.httpService.post<ResponseData<ReportResponse>>(`${serviceCatalog[this.SERVICE_NAME]}/reports/contract`,request.data,{headers})
             .pipe(catchError((error: AxiosError) => {
 
                 const notification: Message = this.kycMessagesService.getMessage(MessageCodes.CONTRACT_DOCUMENT_NOT_GENERATED);

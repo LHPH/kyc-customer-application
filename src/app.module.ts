@@ -10,15 +10,17 @@ import { LoggerModule, Params } from 'nestjs-pino';
 import { TerminusModule } from '@nestjs/terminus';
 import configuration from './config/configuration';
 import messages from './config/yml-message-loader';
+import services from './config/services-catalog-loader';
 import { HealthController } from './health.controller';
 import { EurekaModule } from './eureka/eureka.module';
 import { ApiModule } from './api/api.module';
+import { parseStringToBoolean } from './common/util/functions.util';
 
 @Module({
   imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,TerminusModule, ApiModule,
     ConfigModule.forRoot({ 
       isGlobal: true,
-      load: [configuration,messages]
+      load: [configuration,messages,services]
     }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
@@ -98,7 +100,7 @@ import { ApiModule } from './api/api.module';
             name: 'kyc-customer-application',
             port: configService.get<number>('PORT') ?? 9010
           },
-          disable: false
+          disable: !parseStringToBoolean(configService.get<string>('ENABLE_EUREKA'))
         }
       }
     })  

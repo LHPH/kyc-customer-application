@@ -13,23 +13,17 @@ import { VaultService } from 'src/common/services/vault.service';
             let username;
             let secret;
 
-            console.log('ENV ',env);
             if(env === 'production'){
 
                 const result = await vaultService.readSecrets(configService.get<string>('VAULT_SECRET_PATH')!);
                 const { DATABASE_USER, DATABASE_SECRET} = result.data;
                 username = DATABASE_USER;
                 secret = DATABASE_SECRET;
-                console.log('username ',username);
-                console.log('secret ',secret);
             }
             else{
                 username = configService.get('DATABASE_USER')
                 secret = configService.get('DATABASE_SECRET');
             }
-
-            console.log('username ',username);
-            console.log('secret ',secret);
 
             return {
                 type: 'postgres',

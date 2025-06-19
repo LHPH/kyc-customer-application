@@ -28,10 +28,11 @@ import { parseStringToBoolean } from './common/util/functions.util';
       useFactory: async(configService: ConfigService) => {
 
         const targets = [];
+        const logLevel = configService.get<string>('LOG_LEVEL') || 'info';
         targets.push(
           {
             target: 'pino-pretty',
-            level: configService.get<string>('LOG_LEVEL') || 'info',
+            level: logLevel,
             options: {
               colorize: true,
               singleLine: true,
@@ -48,7 +49,7 @@ import { parseStringToBoolean } from './common/util/functions.util';
           targets.push(
             {
               target: 'pino/file',
-              level: configService.get<string>('LOG_LEVEL') || 'info',
+              level: logLevel,
               options:{
                 destination: `${configService.get<string>('LOG_BASE_PATH')}/${configService.get<string>('APP_NAME')}.log`,
                 mkdir: true
@@ -56,7 +57,7 @@ import { parseStringToBoolean } from './common/util/functions.util';
             },
             {
               target: 'pino-roll',
-              level: configService.get<string>('LOG_LEVEL') || 'info',
+              level: logLevel,
               options:{
                 file: `${configService.get<string>('LOG_BASE_PATH')}/${configService.get<string>('APP_NAME')}/app`,
                 size: '50m',
@@ -74,7 +75,7 @@ import { parseStringToBoolean } from './common/util/functions.util';
         
         return {
           pinoHttp: {
-            level: configService.get<string>('LOG_LEVEL') || 'info',
+            level: logLevel,
             autoLogging: true,
             transport: { 
               targets: targets

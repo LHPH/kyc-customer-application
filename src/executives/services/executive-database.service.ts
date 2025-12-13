@@ -113,6 +113,7 @@ export default class ExecutiveDatabaseService {
                 folio: application,
                 serviceCost: service.cost - (service.cost * discount) / 100,
                 active: true,
+                creationDate: new Date()
             };
 
             application.services.push(contractedService);

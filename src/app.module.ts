@@ -38,7 +38,7 @@ import { parseStringToBoolean } from './common/util/functions.util';
               singleLine: true,
               timestampKey: 'time',
               ignore: 'pid,hostname',
-              translateTime: 'yyyy-mm-dd HH:MM:ss'
+              translateTime: 'SYS:yyyy-mm-dd HH:MM:ss'
             }
           }
         );
@@ -64,7 +64,7 @@ import { parseStringToBoolean } from './common/util/functions.util';
                 frequency: 'daily',
                 extension: '.log',
                 mkdir: true,
-                dateFormat: 'yyyy-mm-dd',
+                dateFormat: 'yyyy-MM-dd',
                 limit: {
                   count: 30
                 }
@@ -95,7 +95,8 @@ import { parseStringToBoolean } from './common/util/functions.util';
             port: configService.get<number>('EUREKA_PORT'),
             registryFetchInterval: 30000,
             servicePath: '/eureka/apps',
-            maxRetries: 3
+            maxRetries: 4,
+            requestRetryDelay: 5000 
           },
           service:{
             name: 'kyc-customer-application',

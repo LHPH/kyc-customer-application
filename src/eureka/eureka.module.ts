@@ -1,8 +1,11 @@
-//Based in https://gitlab.com/fboisselier52/nestjs-eureka with minor changes 
-// and replace eureka-js-client with fork @rocketsoftware/eureka-js-client'
+//Based in https://gitlab.com/fboisselier52/nestjs-eureka with minor changes
+// and replace eureka-js-client with fork @rocketsoftware/eureka-js-client
 import { Module, DynamicModule, Provider, Type } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { eurekaClientProvider, EUREKA_MODULE_OPTIONS } from './client/client.provider';
+import {
+  eurekaClientProvider,
+  EUREKA_MODULE_OPTIONS,
+} from './client/client.provider';
 import { EurekaModuleOptions } from './interfaces/eureka.module.options';
 import { EurekaModuleAsyncOptions } from './interfaces/eureka.module.async.options';
 import { EurekaModuleOptionsFactory } from './interfaces/eureka.module.options.factory';
@@ -11,7 +14,9 @@ import { registerProvider } from './register/register.provider';
 import { DiscoveryService } from './discovery/discovery.service';
 
 const DEFAULT_OPTIONS: EurekaModuleOptions = { disable: true };
-const DEFAULT_ASYNC_OPTIONS: EurekaModuleAsyncOptions = { useFactory: () => DEFAULT_OPTIONS };
+const DEFAULT_ASYNC_OPTIONS: EurekaModuleAsyncOptions = {
+  useFactory: () => DEFAULT_OPTIONS,
+};
 
 @Module({
   imports: [HttpModule],
@@ -29,11 +34,15 @@ export class EurekaModule {
   static forRootAsync(asyncOptions: EurekaModuleAsyncOptions): DynamicModule {
     return {
       module: EurekaModule,
-      providers: [EurekaModule.createAsyncProvider(asyncOptions || DEFAULT_ASYNC_OPTIONS)],
+      providers: [
+        EurekaModule.createAsyncProvider(asyncOptions || DEFAULT_ASYNC_OPTIONS),
+      ],
     };
   }
 
-  private static createProvider(options: EurekaModuleOptions): Provider<EurekaModuleOptions> {
+  private static createProvider(
+    options: EurekaModuleOptions,
+  ): Provider<EurekaModuleOptions> {
     return {
       provide: EUREKA_MODULE_OPTIONS,
       useValue: options,
@@ -53,10 +62,14 @@ export class EurekaModule {
 
     if (options.useClass || options.useExisting) {
       // Bug with TypeScript 3.5.2: https://github.com/microsoft/TypeScript/issues/31937
-      const inject = [(options.useClass || options.useExisting) as Type<EurekaModuleOptionsFactory>];
+      const inject = [
+        (options.useClass ||
+          options.useExisting) as Type<EurekaModuleOptionsFactory>,
+      ];
       return {
         provide: EUREKA_MODULE_OPTIONS,
-        useFactory: async (optionsFactory: EurekaModuleOptionsFactory) => await optionsFactory.createEurekaOptions(),
+        useFactory: async (optionsFactory: EurekaModuleOptionsFactory) =>
+          await optionsFactory.createEurekaOptions(),
         inject,
       };
     }

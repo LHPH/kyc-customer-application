@@ -1,14 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({name: 'kyc_services'})
-export default class KycServicesEntity{
+@Entity({ name: 'kyc_services' })
+export default class KycServicesEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  name: string;
 
-    @Column()
-    name: string;
-
-    @Column()
-    cost: number;
+  @Column()
+  cost: number;
 }

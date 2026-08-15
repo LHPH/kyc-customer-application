@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn,CreateDateColumn, OneToMany} from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  CreateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import KycChannelEntity from './kyc-channel';
 import KycOfficeEntity from './kyc-office';
 import KycExecutiveEntity from './kyc-executive';
@@ -7,46 +15,48 @@ import KycCustomerServiceEntity from './kyc-customer-service';
 import Promotions from '../interfaces/promotions';
 import KycOfferEntity from './kyc-offer';
 
-@Entity({name: 'kyc_customer_application'})
-export default class KycCustomerApplicationEntity{
+@Entity({ name: 'kyc_customer_application' })
+export default class KycCustomerApplicationEntity {
+  @PrimaryGeneratedColumn()
+  id?: number;
 
-    @PrimaryGeneratedColumn()
-    id?: number;
+  @Column({ name: 'promotional_code', type: 'varchar', nullable: true })
+  promotionalCode: string | null;
 
-    @Column({name: 'promotional_code', type: 'varchar', nullable: true })
-    promotionalCode: string | null;
+  @OneToOne(() => KycChannelEntity, { eager: true })
+  @JoinColumn({ name: 'id_channel', referencedColumnName: 'id' })
+  channel: KycChannelEntity;
 
-    @OneToOne(() => KycChannelEntity, { eager: true })
-    @JoinColumn({name: 'id_channel',referencedColumnName: 'id'})
-    channel: KycChannelEntity
-    
-    @OneToOne(() => KycOfficeEntity, { eager: true })
-    @JoinColumn({name: 'id_office',referencedColumnName: 'id'})
-    office: KycOfficeEntity
+  @OneToOne(() => KycOfficeEntity, { eager: true })
+  @JoinColumn({ name: 'id_office', referencedColumnName: 'id' })
+  office: KycOfficeEntity;
 
-    @OneToOne(() => KycCustomerEntity, { eager: true })
-    @JoinColumn({name: 'id_customer', referencedColumnName: 'id'})
-    customer: KycCustomerEntity
+  @OneToOne(() => KycCustomerEntity, { eager: true })
+  @JoinColumn({ name: 'id_customer', referencedColumnName: 'id' })
+  customer: KycCustomerEntity;
 
-    @OneToOne(() => KycExecutiveEntity, { eager: true })
-    @JoinColumn({name: 'id_executive',referencedColumnName: 'id'})
-    executive: KycExecutiveEntity
+  @OneToOne(() => KycExecutiveEntity, { eager: true })
+  @JoinColumn({ name: 'id_executive', referencedColumnName: 'id' })
+  executive: KycExecutiveEntity;
 
-    @OneToOne(() => KycOfferEntity, { eager: true })
-    @JoinColumn({name: 'id_offer',referencedColumnName: 'id'})
-    offer?: KycOfferEntity | null
+  @OneToOne(() => KycOfferEntity, { eager: true })
+  @JoinColumn({ name: 'id_offer', referencedColumnName: 'id' })
+  offer?: KycOfferEntity | null;
 
-    @Column({name: 'promotions', type: 'jsonb'})
-    promotions: Promotions
-    
-    @CreateDateColumn({name: 'creation_date', type: 'timestamp', default: () => 'NOW()'})
-    creationDate?: Date;
+  @Column({ name: 'promotions', type: 'jsonb' })
+  promotions: Promotions;
 
-    @OneToMany(() => KycCustomerServiceEntity, (service) => service.folio, {
-        eager: true,
-        cascade: true
-    })
-    @JoinColumn({name: 'id', referencedColumnName: 'folio'})
-    services: KycCustomerServiceEntity[]
-    
+  @CreateDateColumn({
+    name: 'creation_date',
+    type: 'timestamp',
+    default: () => 'NOW()',
+  })
+  creationDate?: Date;
+
+  @OneToMany(() => KycCustomerServiceEntity, (service) => service.folio, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn({ name: 'id', referencedColumnName: 'folio' })
+  services: KycCustomerServiceEntity[];
 }

@@ -1,12 +1,11 @@
-import {IsNumber, IsPositive} from 'class-validator'
+import { IsNumber, IsPositive } from 'class-validator';
 
-export class AdjustCustomerContractServiceReq{
+export class AdjustCustomerContractServiceReq {
+  @IsNumber()
+  @IsPositive()
+  customerId: number;
 
-    @IsNumber()
-    @IsPositive()
-    customerId: number
-
-    @IsPositive()
-    @IsNumber()
-    cost: number
+  @IsPositive()
+  @IsNumber()
+  cost: number;
 }

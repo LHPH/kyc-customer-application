@@ -1,7 +1,6 @@
-export default interface Message{
-
-    code: string,
-    message: string,
-    type: string,
-    time?: Date
+export default interface Message {
+  code: string;
+  message: string;
+  type: string;
+  time?: Date;
 }

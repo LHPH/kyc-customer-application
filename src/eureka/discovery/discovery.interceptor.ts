@@ -4,7 +4,7 @@ import { OnApplicationBootstrap, Logger, Injectable, OnApplicationShutdown } fro
 import { AxiosRequestConfig, AxiosRequestHeaders  } from 'axios';
 import { DiscoveryService } from './discovery.service';
 
-interface AdaptAxiosRequestConfig extends AxiosRequestConfig{
+interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
     headers: AxiosRequestHeaders
 }
 

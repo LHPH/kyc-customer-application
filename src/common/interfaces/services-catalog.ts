@@ -1,3 +1,3 @@
-export default interface ServicesCatalog{
-    [key: string]: string
+export default interface ServicesCatalog {
+  [key: string]: string;
 }

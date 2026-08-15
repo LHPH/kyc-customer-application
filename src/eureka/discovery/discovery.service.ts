@@ -1,5 +1,5 @@
-//Based in https://gitlab.com/fboisselier52/nestjs-eureka with minor changes 
-// and replace eureka-js-client with fork @rocketsoftware/eureka-js-client'
+//Based in https://gitlab.com/fboisselier52/nestjs-eureka with minor changes
+// and replace eureka-js-client with fork @rocketsoftware/eureka-js-client
 import { Injectable, Logger } from '@nestjs/common';
 import { EurekaClient, Eureka } from '@rocketsoftware/eureka-js-client';
 import { ServiceDto } from '../interfaces/service';

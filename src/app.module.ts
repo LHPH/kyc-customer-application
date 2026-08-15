@@ -6,7 +6,7 @@ import { ExecutivesModule } from './executives/executives.module';
 import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { LoggerModule, Params } from 'nestjs-pino';
+import { LoggerModule } from 'nestjs-pino';
 import { TerminusModule } from '@nestjs/terminus';
 import configuration from './config/configuration';
 import messages from './config/yml-message-loader';
@@ -17,48 +17,50 @@ import { ApiModule } from './api/api.module';
 import { parseStringToBoolean } from './common/util/functions.util';
 
 @Module({
-  imports: [CustomersModule, ExecutivesModule, DatabaseModule, CommonModule,TerminusModule, ApiModule,
-    ConfigModule.forRoot({ 
+  imports: [
+    CustomersModule,
+    ExecutivesModule,
+    DatabaseModule,
+    CommonModule,
+    TerminusModule,
+    ApiModule,
+    ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration,messages,services]
+      load: [configuration, messages, services],
     }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async(configService: ConfigService) => {
-
+      useFactory: async (configService: ConfigService) => {
         const targets = [];
         const logLevel = configService.get<string>('LOG_LEVEL') || 'info';
-        targets.push(
-          {
-            target: 'pino-pretty',
-            level: logLevel,
-            options: {
-              colorize: true,
-              singleLine: true,
-              timestampKey: 'time',
-              ignore: 'pid,hostname',
-              translateTime: 'SYS:yyyy-mm-dd HH:MM:ss'
-            }
-          }
-        );
+        targets.push({
+          target: 'pino-pretty',
+          level: logLevel,
+          options: {
+            colorize: true,
+            singleLine: true,
+            timestampKey: 'time',
+            ignore: 'pid,hostname',
+            translateTime: 'SYS:yyyy-mm-dd HH:MM:ss',
+          },
+        });
 
         const env = configService.get<string>('NODE_ENV') || 'development';
-        if(env === 'production'){
-
+        if (env === 'production') {
           targets.push(
             {
               target: 'pino/file',
               level: logLevel,
-              options:{
+              options: {
                 destination: `${configService.get<string>('LOG_BASE_PATH')}/${configService.get<string>('APP_NAME')}.log`,
-                mkdir: true
-              }
+                mkdir: true,
+              },
             },
             {
               target: 'pino-roll',
               level: logLevel,
-              options:{
+              options: {
                 file: `${configService.get<string>('LOG_BASE_PATH')}/${configService.get<string>('APP_NAME')}/app`,
                 size: '50m',
                 frequency: 'daily',
@@ -66,46 +68,47 @@ import { parseStringToBoolean } from './common/util/functions.util';
                 mkdir: true,
                 dateFormat: 'yyyy-MM-dd',
                 limit: {
-                  count: 30
-                }
-              }
-            }
-        );
-        } 
-        
+                  count: 30,
+                },
+              },
+            },
+          );
+        }
+
         return {
           pinoHttp: {
             level: logLevel,
             autoLogging: true,
-            transport: { 
-              targets: targets
-            }
-          }
-        }
-      }
+            transport: {
+              targets: targets,
+            },
+          },
+        };
+      },
     }),
     EurekaModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async(configService: ConfigService) => {
-
+      useFactory: async (configService: ConfigService) => {
         return {
-          eureka:{
+          eureka: {
             host: configService.get<string>('EUREKA_HOST'),
             port: configService.get<number>('EUREKA_PORT'),
             registryFetchInterval: 30000,
             servicePath: '/eureka/apps',
             maxRetries: 4,
-            requestRetryDelay: 5000 
+            requestRetryDelay: 5000,
           },
-          service:{
+          service: {
             name: 'kyc-customer-application',
-            port: configService.get<number>('PORT') ?? 9010
+            port: configService.get<number>('PORT') ?? 9010,
           },
-          disable: !parseStringToBoolean(configService.get<string>('ENABLE_EUREKA'))
-        }
-      }
-    })  
+          disable: !parseStringToBoolean(
+            configService.get<string>('ENABLE_EUREKA'),
+          ),
+        };
+      },
+    }),
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

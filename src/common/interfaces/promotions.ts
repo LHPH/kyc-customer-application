@@ -1,13 +1,12 @@
-import {IsBoolean} from 'class-validator'
+import { IsBoolean } from 'class-validator';
 
-export default class Promotions{
+export default class Promotions {
+  @IsBoolean()
+  acceptPromotions: boolean;
 
-    @IsBoolean()
-    acceptPromotions: boolean
+  @IsBoolean()
+  acceptPromotionsEmail: boolean;
 
-    @IsBoolean()
-    acceptPromotionsEmail: boolean
-
-    @IsBoolean()
-    acceptPromotionsCellPhone: boolean
+  @IsBoolean()
+  acceptPromotionsCellPhone: boolean;
 }

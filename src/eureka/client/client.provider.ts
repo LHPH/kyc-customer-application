@@ -5,9 +5,9 @@ import { Provider } from '@nestjs/common';
 import { Eureka } from '@rocketsoftware/eureka-js-client';
 import { EurekaModuleOptions } from '../interfaces/eureka.module.options';
 import { ClientLogger } from './client.logger';
-import {internalIpV4Sync} from 'internal-ip';
+import { internalIpV4Sync } from 'internal-ip';
 
-const myIp:string = internalIpV4Sync() ?? '127.0.0.1';
+const myIp: string = internalIpV4Sync() ?? '127.0.0.1';
 
 export const EUREKA_MODULE_OPTIONS = 'EUREKA_MODULE_OPTIONS';
 
@@ -26,7 +26,6 @@ export const eurekaClientProvider: Provider = {
 };
 
 function getEurekaProvider(options: EurekaModuleOptions): Eureka {
-
   const host = options.service?.host || myIp;
   const instanceName = options.service?.name || 'UNKNOWN-SERVICE';
   const instancePort = options.service?.port || 8080;

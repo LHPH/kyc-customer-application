@@ -1,37 +1,36 @@
-import { Entity, Column,PrimaryColumn, OneToOne, JoinColumn} from 'typeorm'
+import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
 import KycCustomerAddressEntity from './kyc-customer-address';
 
-@Entity({name: 'kyc_customer'})
-export default class KycCustomerEntity{
+@Entity({ name: 'kyc_customer' })
+export default class KycCustomerEntity {
+  @PrimaryColumn()
+  id: number;
 
-    @PrimaryColumn()
-    id: number;
+  @Column({ name: 'first_name' })
+  firstName: string;
 
-    @Column({name: 'first_name'})
-    firstName: string;
+  @Column({ name: 'second_name', type: 'varchar', nullable: true })
+  secondName: string | null;
 
-    @Column({name: 'second_name',type: 'varchar', nullable: true})
-    secondName: string | null;
+  @Column({ name: 'last_name' })
+  lastName: string;
 
-    @Column({name: 'last_name'})
-    lastName: string
+  @Column({ name: 'second_last_name', type: 'varchar', nullable: true })
+  secondLastName: string | null;
 
-    @Column({name: 'second_last_name',type: 'varchar', nullable: true})
-    secondLastName: string | null;
+  @Column()
+  rfc: string;
 
-    @Column()
-    rfc: string;
+  @Column({ name: 'cell_phone' })
+  cellPhone: string;
 
-    @Column({name: 'cell_phone'})
-    cellPhone: string
+  @Column()
+  email: string;
 
-    @Column()
-    email: string
+  @Column()
+  active: boolean;
 
-    @Column()
-    active: boolean;
-
-    @OneToOne(() => KycCustomerAddressEntity, { eager: true })
-    @JoinColumn({name: 'id', referencedColumnName: 'idCustomer'})
-    address: KycCustomerAddressEntity;
+  @OneToOne(() => KycCustomerAddressEntity, { eager: true })
+  @JoinColumn({ name: 'id', referencedColumnName: 'idCustomer' })
+  address: KycCustomerAddressEntity;
 }

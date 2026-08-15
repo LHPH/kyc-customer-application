@@ -1,23 +1,20 @@
-import {IsNumber, IsPositive} from 'class-validator'
+import { IsNumber, IsPositive } from 'class-validator';
 
-export interface GetDocumentResponse{
-
-    documents: DocumentData[]
-
+export interface GetDocumentResponse {
+  documents: DocumentData[];
 }
 
-export class GetDocumentRequest{
+export class GetDocumentRequest {
+  @IsNumber()
+  @IsPositive()
+  customerId: number;
 
-    @IsNumber()
-    @IsPositive()
-    customerId: number
-
-    @IsPositive()
-    @IsNumber()
-    folio: number
+  @IsPositive()
+  @IsNumber()
+  folio: number;
 }
 
-export interface DocumentData{
-    id: string,
-    name: string
+export interface DocumentData {
+  id: string;
+  name: string;
 }

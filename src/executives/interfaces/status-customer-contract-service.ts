@@ -1,11 +1,10 @@
-import {IsNumber, IsBoolean,IsPositive} from 'class-validator'
+import { IsNumber, IsBoolean, IsPositive } from 'class-validator';
 
-export class StatusCustomerContractServiceReq{
+export class StatusCustomerContractServiceReq {
+  @IsNumber()
+  @IsPositive()
+  customerId: number;
 
-    @IsNumber()
-    @IsPositive()
-    customerId: number
-    
-    @IsBoolean()
-    active: boolean
+  @IsBoolean()
+  active: boolean;
 }

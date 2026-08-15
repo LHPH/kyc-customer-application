@@ -9,14 +9,24 @@ import { ConfigModule } from '@nestjs/config';
 import { parseStringToBoolean } from 'src/common/util/functions.util';
 
 @Module({
-    imports: [HttpModule,CommonModule,ConfigModule],
-    providers: [KycReportService, {
-        provide: SessionChecking,
-        useClass: parseStringToBoolean(process.env.ENABLE_MOCK) ? MockKycUserService: KycUserService 
-    }],
-    exports: [KycReportService, {
-        provide: SessionChecking,
-        useClass: parseStringToBoolean(process.env.ENABLE_MOCK) ? MockKycUserService: KycUserService
-    }]
+  imports: [HttpModule, CommonModule, ConfigModule],
+  providers: [
+    KycReportService,
+    {
+      provide: SessionChecking,
+      useClass: parseStringToBoolean(process.env.ENABLE_MOCK)
+        ? MockKycUserService
+        : KycUserService,
+    },
+  ],
+  exports: [
+    KycReportService,
+    {
+      provide: SessionChecking,
+      useClass: parseStringToBoolean(process.env.ENABLE_MOCK)
+        ? MockKycUserService
+        : KycUserService,
+    },
+  ],
 })
-export class ApiModule{}
+export class ApiModule {}

@@ -1,7 +1,6 @@
-import Message from "./message"
+import Message from './message';
 
-export default interface ResponseData<T>{
-
-    data: T | null,
-    error?: Message | null
+export default interface ResponseData<T> {
+  data: T | null;
+  error?: Message | null;
 }

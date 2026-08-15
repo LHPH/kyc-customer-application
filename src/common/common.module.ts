@@ -5,14 +5,14 @@ import { KycRestExceptionHandler } from './exception/kyc-rest-exception-handler.
 import { VaultService } from './services/vault.service';
 
 @Module({
-    providers: [
-        KycMessagesService,
-        VaultService,
-        {
-            provide: APP_FILTER,
-            useClass: KycRestExceptionHandler
-        }
-    ],
-    exports: [KycMessagesService, VaultService]
+  providers: [
+    KycMessagesService,
+    VaultService,
+    {
+      provide: APP_FILTER,
+      useClass: KycRestExceptionHandler,
+    },
+  ],
+  exports: [KycMessagesService, VaultService],
 })
 export class CommonModule {}

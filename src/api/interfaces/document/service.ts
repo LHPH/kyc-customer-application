@@ -1,5 +1,5 @@
-export interface Service{
-    id: number,
-    cost: number,
-    name?: string
+export interface Service {
+  id: number;
+  cost: number;
+  name?: string;
 }

@@ -1,10 +1,8 @@
-import { KycUserRole } from "../enums/kyc-user-role";
+import { KycUserRole } from '../enums/kyc-user-role';
 
-
-export default interface JwtData{
-
-    owner: number;
-    user: number;
-    role: KycUserRole;
-    channel: number;
+export default interface JwtData {
+  owner: number;
+  user: number;
+  role: KycUserRole;
+  channel: number;
 }

@@ -109,6 +109,7 @@ export default class ExecutiveDatabaseService {
       offer: offerEntity,
       promotions: req.promotions,
       services: [],
+      creationDate: new Date(),
     };
 
     servicesEntities.map((service) => {
